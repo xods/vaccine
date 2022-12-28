@@ -20,7 +20,7 @@ public class Proizvodjac {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "proizvodjac_id", nullable = false)
-    private Long proizvodjac_id;
+    private Long id;
 
     @Column(name = "naziv", unique = true)
     private String naziv;

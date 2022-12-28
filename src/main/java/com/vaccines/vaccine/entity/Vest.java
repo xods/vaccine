@@ -19,7 +19,7 @@ public class Vest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vest_id", nullable = false)
-    private Long vest_id;
+    private Long id;
 
     @Column(name = "naziv", nullable = false)
     private String naziv;
