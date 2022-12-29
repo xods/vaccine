@@ -24,12 +24,12 @@ public class VakcinaPacijentaDTO implements Serializable {
     private UserDTO user;
 
     public VakcinaPacijentaDTO(VakcinaPacijenta vakcinaPacijenta){
-        this.id = vakcinaPacijenta.getId();
-        this.doza = vakcinaPacijenta.getDoza();
-        this.datumVakcinacije = vakcinaPacijenta.getDatumVakcinacije();
-        this.datumKreiranja = vakcinaPacijenta.getDatumKreiranja();
-        this.status = vakcinaPacijenta.getStatus();
-        this.vakcina = new VakcinaDTO(vakcinaPacijenta.getVakcina());
-        this.user = new UserDTO(vakcinaPacijenta.getUser());
+        this(vakcinaPacijenta.getId(),
+                vakcinaPacijenta.getDoza(),
+                vakcinaPacijenta.getDatumVakcinacije(),
+                vakcinaPacijenta.getDatumKreiranja(),
+                vakcinaPacijenta.getStatus(),
+                new VakcinaDTO(vakcinaPacijenta.getVakcina()),
+                new UserDTO(vakcinaPacijenta.getUser()));
     }
 }

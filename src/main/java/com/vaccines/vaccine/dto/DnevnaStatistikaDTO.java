@@ -22,12 +22,12 @@ public class DnevnaStatistikaDTO implements Serializable {
     private Date vremeObjavljivanja;
 
     public DnevnaStatistikaDTO(DnevnaStatistika statistika){
-        this.id = statistika.getStatistika_id();
-        this.oboleli24 = statistika.getOboleli24();
-        this.testirani24 = statistika.getTestirani24();
-        this.ukupnoOboleli = statistika.getUkupnoOboleli();
-        this.hospitalizovani = statistika.getHospitalizovani();
-        this.naRespiratoru = statistika.getNaRespiratoru();
-        this.vremeObjavljivanja = statistika.getVremeObjavljivanja();
+        this(statistika.getStatistika_id(),
+                statistika.getOboleli24(),
+                statistika.getTestirani24(),
+                statistika.getUkupnoOboleli(),
+                statistika.getHospitalizovani(),
+                statistika.getNaRespiratoru(),
+                statistika.getVremeObjavljivanja());
     }
 }

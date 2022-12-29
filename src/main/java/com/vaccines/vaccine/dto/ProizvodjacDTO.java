@@ -17,8 +17,8 @@ public class ProizvodjacDTO implements Serializable {
     private String drzava;
 
     public ProizvodjacDTO(Proizvodjac proizvodjac){
-        this.id = proizvodjac.getId();
-        this.naziv = proizvodjac.getNaziv();
-        this.drzava = proizvodjac.getDrzava();
+        this(proizvodjac.getId(),
+                proizvodjac.getNaziv(),
+                proizvodjac.getDrzava());
     }
 }

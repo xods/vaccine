@@ -26,15 +26,15 @@ public class UserDTO implements Serializable {
     private ERole uloga;
 
     public UserDTO(User user){
-        this.id = user.getId();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.ime = user.getIme();
-        this.prezime = user.getPrezime();
-        this.datumRodjenja = user.getDatumRodjenja();
-        this.JMBG = user.getJMBG();
-        this.adresa = user.getAdresa();
-        this.datumRegistracije = user.getDatumReg();
-        this.uloga = user.getUloga();
+        this(user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getIme(),
+                user.getPrezime(),
+                user.getDatumRodjenja(),
+                user.getJMBG(),
+                user.getAdresa(),
+                user.getDatumReg(),
+                user.getUloga());
     }
 }

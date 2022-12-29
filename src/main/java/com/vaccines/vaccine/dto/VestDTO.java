@@ -19,9 +19,9 @@ public class VestDTO implements Serializable {
     private Date vremeObjavljivanja;
 
     public VestDTO(Vest vest){
-        this.id = vest.getId();
-        this.naziv = vest.getNaziv();
-        this.sadrzaj = vest.getSadrzaj();
-        this.vremeObjavljivanja = vest.getVremeObjavljivanja();
+        this(vest.getId(),
+                vest.getNaziv(),
+                vest.getSadrzaj(),
+                vest.getVremeObjavljivanja());
     }
 }

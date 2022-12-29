@@ -24,13 +24,13 @@ public class OrderDTO implements Serializable {
     private UserDTO kreator;
 
     public OrderDTO (Order order){
-        this.id = order.getId();
-        this.kolicina = order.getKolicina();
-        this.razlog = order.getRazlog();
-        this.datumKreiranja = order.getDatumKreiranja();
-        this.status = order.getStatus();
-        this.napomena = order.getNapomena();
-        this.vakcina = new VakcinaDTO(order.getVakcina());
-        this.kreator = new UserDTO(order.getKreator());
+        this(order.getId(),
+                order.getKolicina(),
+                order.getRazlog(),
+                order.getDatumKreiranja(),
+                order.getStatus(),
+                order.getNapomena(),
+                new VakcinaDTO(order.getVakcina()),
+                new UserDTO(order.getKreator()));
     }
 }
