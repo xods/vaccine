@@ -8,7 +8,6 @@ public class VaccineApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(VaccineApplication.class, args);
-		System.out.print(new Date());
 	}
 
 }
