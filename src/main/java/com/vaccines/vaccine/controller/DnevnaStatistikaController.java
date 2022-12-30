@@ -44,6 +44,8 @@ public class DnevnaStatistikaController {
         statistika.setNaRespiratoru(statistikaDTO.getNaRespiratoru());
         statistika.setVremeObjavljivanja(new Date());
 
+        statistika = statistikaRepository.save(statistika);
+
         return new ResponseEntity<>(new DnevnaStatistikaDTO(statistika), HttpStatus.CREATED);
     }
 }
