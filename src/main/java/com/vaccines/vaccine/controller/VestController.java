@@ -41,6 +41,8 @@ public class VestController {
         vest.setSadrzaj(vestDTO.getSadrzaj());
         vest.setVremeObjavljivanja(new Date());
 
+        vest = vestRepository.save(vest);
+
         return new ResponseEntity<>(new VestDTO(vest), HttpStatus.CREATED);
     }
 }
