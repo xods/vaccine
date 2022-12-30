@@ -15,10 +15,12 @@ public class VakcinaDTO implements Serializable {
     private Long id;
     private String naziv;
     private Integer kolicina;
+    private ProizvodjacDTO proizvodjacDTO;
 
     public VakcinaDTO(Vakcina vakcina){
         this(vakcina.getId(),
                 vakcina.getNaziv(),
-                vakcina.getKolicina());
+                vakcina.getKolicina(),
+                new ProizvodjacDTO(vakcina.getProizvodjac()));
     }
 }
