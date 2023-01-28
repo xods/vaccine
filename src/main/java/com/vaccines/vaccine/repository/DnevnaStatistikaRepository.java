@@ -10,6 +10,4 @@ import java.util.Date;
 @Repository("dnevnaStatistika")
 public interface DnevnaStatistikaRepository extends JpaRepository<DnevnaStatistika, Long> {
     DnevnaStatistika findByVremeObjavljivanja(@Nullable Date vremeObjavljivanja);
-
-
 }
