@@ -2,7 +2,6 @@ package com.vaccines.vaccine.controller;
 
 import com.vaccines.vaccine.dto.DnevnaStatistikaDTO;
 import com.vaccines.vaccine.entity.DnevnaStatistika;
-import com.vaccines.vaccine.repository.DnevnaStatistikaRepository;
 import com.vaccines.vaccine.service.DnevnaStatistikaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

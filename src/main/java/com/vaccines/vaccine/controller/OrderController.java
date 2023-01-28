@@ -1,14 +1,10 @@
 package com.vaccines.vaccine.controller;
 
 import com.vaccines.vaccine.dto.OrderDTO;
-import com.vaccines.vaccine.dto.UserDTO;
-import com.vaccines.vaccine.dto.VakcinaDTO;
 import com.vaccines.vaccine.entity.EStatus;
 import com.vaccines.vaccine.entity.Order;
 import com.vaccines.vaccine.entity.User;
 import com.vaccines.vaccine.entity.Vakcina;
-import com.vaccines.vaccine.repository.UserRepository;
-import com.vaccines.vaccine.repository.VakcinaRepository;
 import com.vaccines.vaccine.service.OrderService;
 import com.vaccines.vaccine.service.UserService;
 import com.vaccines.vaccine.service.VakcinaService;
@@ -66,7 +62,7 @@ public class OrderController {
         order.setDatumKreiranja(new Date());
         order.setStatus(EStatus.CREATED);
 
-        Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).get();
+        Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).orElse(new Vakcina());
         order.setVakcina(vakcina);
 
         User user = userService.getReferenceById(orderDTO.getKreator().getId());
@@ -79,13 +75,13 @@ public class OrderController {
 
     @PostMapping(consumes = "application/json", value = "/{id}")
     public ResponseEntity<OrderDTO> update(@RequestBody OrderDTO orderDTO, @PathVariable("id") Long id){
-        Order order = orderService.findById(id).get();
+        Order order = orderService.findById(id).orElse(new Order());
 
         order.setStatus(orderDTO.getStatus());
         order.setNapomena(orderDTO.getNapomena());
 
         if (orderDTO.getStatus().equals(EStatus.APPROVED)){
-            Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).get();
+            Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).orElse(new Vakcina());
             vakcina.setKolicina(vakcina.getKolicina() + orderDTO.getKolicina());
             vakcinaService.save(vakcina);
         }

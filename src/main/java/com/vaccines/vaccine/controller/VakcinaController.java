@@ -3,8 +3,8 @@ package com.vaccines.vaccine.controller;
 import com.vaccines.vaccine.dto.VakcinaDTO;
 import com.vaccines.vaccine.entity.Proizvodjac;
 import com.vaccines.vaccine.entity.Vakcina;
-import com.vaccines.vaccine.repository.ProizvodjacRepository;
-import com.vaccines.vaccine.repository.VakcinaRepository;
+import com.vaccines.vaccine.service.ProizvodjacService;
+import com.vaccines.vaccine.service.VakcinaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -20,13 +20,13 @@ import java.util.Optional;
 public class VakcinaController {
 
     @Autowired
-    VakcinaRepository vakcinaRepository;
+    VakcinaService vakcinaService;
     @Autowired
-    ProizvodjacRepository proizvodjacRepository;
+    ProizvodjacService proizvodjacService;
 
     @GetMapping(value = "/")
     public ResponseEntity<List<VakcinaDTO>> getAll(){
-        List<Vakcina> vakcine = vakcinaRepository.findAll();
+        List<Vakcina> vakcine = vakcinaService.findAll();
 
         // Convert categories to DTOs
         List<VakcinaDTO> vakcineDTO = new ArrayList<>();
@@ -46,7 +46,7 @@ public class VakcinaController {
             sort = u ? sort.ascending() : sort.descending();
         }
 
-        List<Vakcina> vakcine = vakcinaRepository.findByNazivContainsIgnoreCaseOrProizvodjac_NazivContainsIgnoreCaseOrProizvodjac_DrzavaContainsIgnoreCase(term, term, term, sort);
+        List<Vakcina> vakcine = vakcinaService.findByNazivContainsIgnoreCaseOrProizvodjac_NazivContainsIgnoreCaseOrProizvodjac_DrzavaContainsIgnoreCase(term, term, term, sort);
 
         List<VakcinaDTO> vakcineDTO = new ArrayList<>();
         for (Vakcina v : vakcine) {
@@ -60,22 +60,22 @@ public class VakcinaController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<VakcinaDTO> find(@PathVariable Long id){
-        Optional<Vakcina> vakcina = vakcinaRepository.findById(id);
+        Optional<Vakcina> vakcina = vakcinaService.findById(id);
 
 
-        return new ResponseEntity<>(new VakcinaDTO(vakcina.get()), HttpStatus.OK);
+        return new ResponseEntity<>(new VakcinaDTO(vakcina.orElse(new Vakcina())), HttpStatus.OK);
     }
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<VakcinaDTO> saveVakcina(@RequestBody VakcinaDTO vakcinaDTO){
         Vakcina vakcina = new Vakcina();
-        Optional<Proizvodjac> proizvodjac = proizvodjacRepository.findById(vakcinaDTO.getProizvodjacDTO().getId());
+        Optional<Proizvodjac> proizvodjac = proizvodjacService.findById(vakcinaDTO.getProizvodjacDTO().getId());
 
         vakcina.setNaziv(vakcinaDTO.getNaziv());
         vakcina.setKolicina(0);
-        vakcina.setProizvodjac(proizvodjac.get());
+        vakcina.setProizvodjac(proizvodjac.orElse(new Proizvodjac()));
 
-        vakcina = vakcinaRepository.save(vakcina);
+        vakcina = vakcinaService.save(vakcina);
 
         return new ResponseEntity<>(new VakcinaDTO(vakcina), HttpStatus.CREATED);
     }
@@ -83,14 +83,14 @@ public class VakcinaController {
     @PutMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<VakcinaDTO> updateVakcina(@RequestBody VakcinaDTO vakcinaDTO, @PathVariable("id") Long id){
         
-        Vakcina vakcina = vakcinaRepository.findById(id).get();
-        Proizvodjac proizvodjac = proizvodjacRepository.findById(vakcinaDTO.getProizvodjacDTO().getId()).get();
+        Vakcina vakcina = vakcinaService.findById(id).orElse(new Vakcina());
+        Proizvodjac proizvodjac = proizvodjacService.findById(vakcinaDTO.getProizvodjacDTO().getId()).orElse(new Proizvodjac());
 
         vakcina.setNaziv(vakcinaDTO.getNaziv());
         vakcina.setKolicina(0);
         vakcina.setProizvodjac(proizvodjac);
         
-        vakcina = vakcinaRepository.save(vakcina);
+        vakcina = vakcinaService.save(vakcina);
         return  new ResponseEntity<>(new VakcinaDTO(vakcina), HttpStatus.OK);
     }
 }
