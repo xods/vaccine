@@ -28,7 +28,7 @@ public class OrderController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/adminOrders")
     public ResponseEntity<List<OrderDTO>> getAllAdmin(){
         List<Order> orders = orderService.findByStatusOrStatus(EStatus.CREATED, EStatus.CHANGED);
 
@@ -41,9 +41,9 @@ public class OrderController {
     }
 
     /*
-    @GetMapping(value = "/")
+    @GetMapping(value = "/staffOrders")
     public ResponseEntity<List<OrderDTO>> getAllStaff(){
-        List<Order> orders = orderRepository.findByStatusOrStatus(EStatus.CREATED, EStatus.RETURNED);
+        List<Order> orders = orderService.findByStatusOrStatus(EStatus.CREATED, EStatus.RETURNED);
 
         List<OrderDTO> ordersDTO = new ArrayList<>();
         for(Order o : orders){
@@ -73,7 +73,7 @@ public class OrderController {
         return new ResponseEntity<>(new OrderDTO(order), HttpStatus.CREATED);
     }
 
-    @PostMapping(consumes = "application/json", value = "/{id}")
+    @PutMapping(consumes = "application/json", value = "/{id}")
     public ResponseEntity<OrderDTO> update(@RequestBody OrderDTO orderDTO, @PathVariable("id") Long id){
         Order order = orderService.findById(id).orElse(new Order());
 

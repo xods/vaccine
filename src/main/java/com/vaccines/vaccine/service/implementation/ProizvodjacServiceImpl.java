@@ -6,6 +6,7 @@ import com.vaccines.vaccine.service.ProizvodjacService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,5 +18,15 @@ public class ProizvodjacServiceImpl implements ProizvodjacService {
     @Override
     public Optional<Proizvodjac> findById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Proizvodjac> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Proizvodjac save(Proizvodjac proizvodjac) {
+        return repository.save(proizvodjac);
     }
 }
