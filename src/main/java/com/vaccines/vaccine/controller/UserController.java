@@ -4,7 +4,7 @@ import com.vaccines.vaccine.dto.UserDTO;
 import com.vaccines.vaccine.entity.ERole;
 import com.vaccines.vaccine.entity.User;
 import com.vaccines.vaccine.repository.UserRepository;
-import com.vaccines.vaccine.service.UserService;
+import com.vaccines.vaccine.service.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private UserRepository userRepository;
