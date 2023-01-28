@@ -4,6 +4,7 @@ import com.vaccines.vaccine.dto.UserDTO;
 import com.vaccines.vaccine.entity.ERole;
 import com.vaccines.vaccine.entity.User;
 import com.vaccines.vaccine.repository.UserRepository;
+import com.vaccines.vaccine.service.UserService;
 import com.vaccines.vaccine.service.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,14 +20,11 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers(){
-        List<User> users = userRepository.findAll();
+        List<User> users = userService.findAll();
 
         List<UserDTO> usersDTO = new ArrayList<>();
         for (User u : users){
@@ -50,7 +48,7 @@ public class UserController {
         user.setDatumReg(new Date());
         user.setUloga(ERole.PATIENTS);
 
-        user = userRepository.save(user);
+        user = userService.save(user);
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
     }
 }
