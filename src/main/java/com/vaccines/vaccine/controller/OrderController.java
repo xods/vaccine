@@ -10,6 +10,8 @@ import com.vaccines.vaccine.entity.Vakcina;
 import com.vaccines.vaccine.repository.UserRepository;
 import com.vaccines.vaccine.repository.VakcinaRepository;
 import com.vaccines.vaccine.service.OrderService;
+import com.vaccines.vaccine.service.UserService;
+import com.vaccines.vaccine.service.VakcinaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,9 @@ public class OrderController {
     @Autowired
     OrderService orderService;
     @Autowired
-    VakcinaRepository vakcinaRepository;
+    VakcinaService vakcinaService;
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @GetMapping(value = "/")
     public ResponseEntity<List<OrderDTO>> getAllAdmin(){
@@ -64,10 +66,10 @@ public class OrderController {
         order.setDatumKreiranja(new Date());
         order.setStatus(EStatus.CREATED);
 
-        Vakcina vakcina = vakcinaRepository.findById(orderDTO.getVakcina().getId()).get();
+        Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).get();
         order.setVakcina(vakcina);
 
-        User user = userRepository.getReferenceById(orderDTO.getKreator().getId());
+        User user = userService.getReferenceById(orderDTO.getKreator().getId());
         order.setKreator(user);
 
         order = orderService.save(order);
@@ -83,9 +85,9 @@ public class OrderController {
         order.setNapomena(orderDTO.getNapomena());
 
         if (orderDTO.getStatus().equals(EStatus.APPROVED)){
-            Vakcina vakcina = vakcinaRepository.findById(orderDTO.getVakcina().getId()).get();
+            Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).get();
             vakcina.setKolicina(vakcina.getKolicina() + orderDTO.getKolicina());
-            vakcinaRepository.save(vakcina);
+            vakcinaService.save(vakcina);
         }
         orderService.save(order);
 
