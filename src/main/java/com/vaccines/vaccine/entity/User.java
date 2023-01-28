@@ -53,5 +53,5 @@ public class User implements Serializable {
 	private ERole uloga;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<VakcinaPacijenta> vakcine = new java.util.LinkedHashSet<>();
+	private Set<VakcinaPacijenta> vakcine = new HashSet<>();
 }
