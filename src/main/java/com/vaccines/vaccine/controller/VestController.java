@@ -3,7 +3,7 @@ package com.vaccines.vaccine.controller;
 import com.vaccines.vaccine.dto.VakcinaDTO;
 import com.vaccines.vaccine.dto.VestDTO;
 import com.vaccines.vaccine.entity.Vest;
-import com.vaccines.vaccine.repository.VestRepository;
+import com.vaccines.vaccine.service.VestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +18,11 @@ import java.util.List;
 public class VestController {
 
     @Autowired
-    VestRepository vestRepository;
+    VestService vestService;
 
     @GetMapping
     public ResponseEntity<List<VestDTO>> getAll(){
-        List<Vest> vesti = vestRepository.findAll();
+        List<Vest> vesti = vestService.findAll();
 
         // Convert categories to DTOs
         List<VestDTO> vestiDTO = new ArrayList<>();
@@ -41,7 +41,7 @@ public class VestController {
         vest.setSadrzaj(vestDTO.getSadrzaj());
         vest.setVremeObjavljivanja(new Date());
 
-        vest = vestRepository.save(vest);
+        vest = vestService.save(vest);
 
         return new ResponseEntity<>(new VestDTO(vest), HttpStatus.CREATED);
     }
