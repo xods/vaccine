@@ -7,9 +7,9 @@ import com.vaccines.vaccine.entity.EStatus;
 import com.vaccines.vaccine.entity.Order;
 import com.vaccines.vaccine.entity.User;
 import com.vaccines.vaccine.entity.Vakcina;
-import com.vaccines.vaccine.repository.OrderRepository;
 import com.vaccines.vaccine.repository.UserRepository;
 import com.vaccines.vaccine.repository.VakcinaRepository;
+import com.vaccines.vaccine.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    OrderRepository orderRepository;
+    OrderService orderService;
     @Autowired
     VakcinaRepository vakcinaRepository;
     @Autowired
@@ -32,7 +32,7 @@ public class OrderController {
 
     @GetMapping(value = "/")
     public ResponseEntity<List<OrderDTO>> getAllAdmin(){
-        List<Order> orders = orderRepository.findByStatusOrStatus(EStatus.CREATED, EStatus.CHANGED);
+        List<Order> orders = orderService.findByStatusOrStatus(EStatus.CREATED, EStatus.CHANGED);
 
         List<OrderDTO> ordersDTO = new ArrayList<>();
         for(Order o : orders){
@@ -70,14 +70,14 @@ public class OrderController {
         User user = userRepository.getReferenceById(orderDTO.getKreator().getId());
         order.setKreator(user);
 
-        order = orderRepository.save(order);
+        order = orderService.save(order);
 
         return new ResponseEntity<>(new OrderDTO(order), HttpStatus.CREATED);
     }
 
     @PostMapping(consumes = "application/json", value = "/{id}")
     public ResponseEntity<OrderDTO> update(@RequestBody OrderDTO orderDTO, @PathVariable("id") Long id){
-        Order order = orderRepository.findById(id).get();
+        Order order = orderService.findById(id).get();
 
         order.setStatus(orderDTO.getStatus());
         order.setNapomena(orderDTO.getNapomena());
@@ -87,7 +87,7 @@ public class OrderController {
             vakcina.setKolicina(vakcina.getKolicina() + orderDTO.getKolicina());
             vakcinaRepository.save(vakcina);
         }
-        orderRepository.save(order);
+        orderService.save(order);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
