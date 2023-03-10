@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("proizvodjac")
+@RequestMapping("/proizvodjac")
 public class ProizvodjacController {
 
     @Autowired

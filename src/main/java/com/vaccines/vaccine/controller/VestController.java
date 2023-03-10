@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("vest")
+@RequestMapping("/vest")
 public class VestController {
 
     @Autowired

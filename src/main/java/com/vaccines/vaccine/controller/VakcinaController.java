@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("vakcina")
+@RequestMapping("/vakcina")
 public class VakcinaController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class VakcinaController {
     @Autowired
     ProizvodjacService proizvodjacService;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/sve")
     public ResponseEntity<List<VakcinaDTO>> getAll(){
         List<Vakcina> vakcine = vakcinaService.findAll();
 
