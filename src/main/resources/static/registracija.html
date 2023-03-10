@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registracija</title>
+</head>
+<body>
+
+    <form action="/user" method="post">
+        <table>
+            <tr>
+                <td><label>Email</label></td>
+                <td><input type="email" value="" name="email" required></td>
+            </tr>
+            <tr>
+                <td><label>Password</label></td>
+                <td><input type="password" value="" name="password" required></td>
+            </tr>
+            <tr>
+                <td><label>Ponovite Password</label></td>
+                <td><input type="password" value="" name="password2" required></td>
+            </tr>
+            <tr>
+                <td><label>Ime</label></td>
+                <td><input type="text" value="" name="ime" required></td>
+            </tr>
+            <tr>
+                <td><label>Prezime</label></td>
+                <td><input type="text" value="" name="prezime" required></td>
+            </tr>
+            <tr>
+                <td><label>Maticni broj</label></td>
+                <td><input type="text" value="" name="JMBG" minlength="13" maxlength="13" pattern="[0-9]{13}" required></td>
+            </tr>
+            <tr>
+                <td><label>Adresa</label></td>
+                <td><input type="text" value="" name="adresa" required></td>
+            </tr>
+            <tr>
+                <td><label>Datum rođenja</label></td>
+                <td><input type="date" value="" name="datumRodjenja" pattern="dd/mm/yyyy" required></td>
+            </tr>
+        </table>
+        <input type="submit" value="Registruj se">
+    </form>
+
+</body>
+</html>
