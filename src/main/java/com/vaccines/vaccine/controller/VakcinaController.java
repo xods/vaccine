@@ -65,8 +65,12 @@ public class VakcinaController implements ServletContextAware {
 
     }
 
-    @GetMapping(value ="/search")
-    public ResponseEntity<List<VakcinaDTO>> sorting(@RequestParam String term, @RequestParam Integer mi, @RequestParam Integer mx, @RequestParam String s, @RequestParam Boolean u){
+    @PostMapping(value ="/search")
+    public ModelAndView sorting(@RequestParam String term,
+                                @RequestParam Integer mi,
+                                @RequestParam Integer mx,
+                                @RequestParam String s,
+                                @RequestParam Boolean u){
 
         Sort sort = s.equals("naziv") || s.equals("proizvodjac.naziv") || s.equals("proizvodjac.drzava") || s.equals("kolicina")? Sort.by(s): null;
 
@@ -83,7 +87,10 @@ public class VakcinaController implements ServletContextAware {
             }
         }
 
-        return new ResponseEntity<>(vakcineDTO, HttpStatus.OK);
+        ModelAndView rez = new ModelAndView("vakcine");
+        rez.addObject("vakcine", vakcineDTO);
+
+        return rez;
     }
 
     @GetMapping(value = "/{id}")

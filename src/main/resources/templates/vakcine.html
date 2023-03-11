@@ -17,5 +17,30 @@
             <td th:text="${v.kolicina}"></td>
         </tr>
     </table>
+
+    <form method="post" action="/vakcina/search">
+        <label for="s">Pretraga</label>
+        <input id="s" type="search" value="" name="term" required><br>
+
+        <label for="km">Minimalna kolicina</label>
+        <input id="km" type="number" value="0" min="0"  max="1000" step="5" name="mi" required><br>
+
+        <label for="kx">Maksimalna kolicina</label>
+        <input id="kx" type="number" value="1000" min="0"  max="1000" step="5" name="mx" required><br>
+
+        <label for="so">Sortiraj po</label>
+        <select id="so" name="s">
+            <option value="" selected></option>
+            <option value="naziv">Nazivu vakcine</option>
+            <option value="proizvodjac.naziv">Nazivu proizvođača</option>
+            <option value="proizvodjac.drzava">Državi proizvođača</option>
+            <option value="kolicina">Količini</option>
+        </select><br>
+
+        <input type="checkbox" name="u" id="u" checked>
+        <label for="u">Rastuće</label><br>
+
+        <input type="submit" value="Sortiraj">
+    </form>
 </body>
 </html>
