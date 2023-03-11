@@ -70,7 +70,11 @@ public class VakcinaController implements ServletContextAware {
                                 @RequestParam Integer mi,
                                 @RequestParam Integer mx,
                                 @RequestParam String s,
-                                @RequestParam Boolean u){
+                                @RequestParam Boolean u,
+                                HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            response.sendRedirect(bURL);
+        }
 
         Sort sort = s.equals("naziv") || s.equals("proizvodjac.naziv") || s.equals("proizvodjac.drzava") || s.equals("kolicina")? Sort.by(s): null;
 
@@ -131,6 +135,7 @@ public class VakcinaController implements ServletContextAware {
                                       @RequestParam String idP,
                                       @PathVariable("id") String id,
                                       HttpSession session, HttpServletResponse response) throws IOException {
+
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
             response.sendRedirect(bURL);
         }

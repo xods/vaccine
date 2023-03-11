@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Order</title>
+</head>
+<body>
+
+    <form method="post" th:action="|order/${order.id}|">
+        <label>Vakcina</label>
+        <label th:text="${order.vakcina.naziv}"></label><br>
+
+        <label for="kol">Količina</label>
+        <input id="kol" name="kolicina" type="number" th:if="${session.role == 'STAFF'}" min="1" th:value="${order.kolicina}"><br>
+        <p th:if="${session.role == 'ADMIN'}" th:text="${order.kolicina}"></p>
+
+        <label>Razlog nabavke</label>
+        <p id="rz" name="razlog" th:value="${order.razlog}" required></p><br>
+
+        <fieldset th:if="${session.role == 'ADMIN'}">
+            <legend>Status</legend>
+            <div th:each="status : ${T(com.vaccines.vaccine.entity.EStatus).values()}">
+                <input name="status" type="radio" th:value="${status}" th:checked="${status == order.status}">
+                <label th:text="${status}"></label>
+            </div>
+        </fieldset>
+
+        <label>Napomena</label>
+        <p th:if="${session.role == 'STAFF'}" th:text="${order.napomena}"></p>
+        <textarea name="napomena" th:value="${order.napomena}" th:if="${session.role == 'ADMIN'}"></textarea>
+
+        <input type="submit" value="Obradi">
+    </form>
+</body>
+</html>

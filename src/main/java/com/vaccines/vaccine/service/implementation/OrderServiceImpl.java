@@ -16,9 +16,16 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository repository;
 
-    @Override
-    public List<Order> findByStatusOrStatus(EStatus status, EStatus status1) {
-        return repository.findByStatusOrStatus(status, status1);
+    public List<Order> findByStatusOrStatus(EStatus status, EStatus status2) {
+        return repository.findByStatusOrStatus(status, status2);
+    }
+
+    public List<Order> findByKreator_IdAndStatus(Long id, EStatus status){
+        return repository.findByKreator_IdAndStatus(id, status);
+    }
+
+    public List<Order> findByKreator_IdAndStatusOrStatus(Long id, EStatus status, EStatus status2) {
+        return repository.findByKreator_IdAndStatusOrStatus(id, status, status2);
     }
 
     public Optional<Order> findById(Long id){

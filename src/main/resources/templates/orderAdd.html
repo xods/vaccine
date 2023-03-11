@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Narudžbenica</title>
+</head>
+<body>
+    <form method="post" th:action="|order/|">
+        <label for="vId">Vakcina</label>
+        <select id="vId" name="vId" required>
+            <option th:each="v : ${vakcine}" th:value="${v.id}" th:text="${v.naziv}"></option>
+        </select><br>
+
+        <label for="kol">Potrebna količina</label>
+        <input id="kol" name="kolicina" type="number" min="1" value="1" required><br>
+
+        <label>Razlog nabavke</label>
+        <textarea id="rz" name="razlog" value="" required></textarea><br>
+
+        <input type="submit" value="Naruči">
+    </form>
+</body>
+</html>

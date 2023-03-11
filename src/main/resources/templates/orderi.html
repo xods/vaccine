@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Orderi</title>
+</head>
+<body>
+
+    <ul>
+        <li><a href="vestAdd.html">Dodaj vest</a></li>
+        <li th:if="${session.role == 'STAFF'}"><a href="order/">Nabavi vakcinu</a></li>
+        <li><a href="log/odjava">Odjava</a></li>
+    </ul>
+
+    <table>
+        <caption>Kreirane narudžbine</caption>
+        <tr>
+            <th>Vakcina</th>
+            <th>Količina</th>
+            <th>Razlog</th>
+            <th>Datum kreiranja</th>
+        </tr>
+        <tr th:each="o : ${ordersCr}">
+            <td th:text="${o.vakcina.naziv}"></td>
+            <td th:text="${o.kolicina}"></td>
+            <td th:text="${o.razlog}"></td>
+            <td th:text="${#dates.format(o.datumKreiranja, 'dd-MM-yyyy')}"></td>
+            <td th:if="${session.role == 'ADMIN'}"><a th:href="|order/${o.id}|">Pregledaj</a></td>
+        </tr>
+    </table><br>
+
+    <table th:if="${session.role == 'STAFF'}">
+        <caption>Vraćene narudžbine</caption>
+        <tr>
+            <th>Vakcina</th>
+            <th>Količina</th>
+            <th>Razlog</th>
+            <th>Datum kreiranja</th>
+        </tr>
+        <tr th:each="o : ${ordersRe}">
+            <td th:text="${o.vakcina.naziv}"></td>
+            <td th:text="${o.kolicina}"></td>
+            <td th:text="${o.razlog}"></td>
+            <td th:text="${#dates.format(o.datumKreiranja, 'dd-MM-yyyy')}"></td>
+            <td th:if="${session.role == 'STAFF'}"><a th:href="|order/${o.id}|">Pregledaj</a></td>
+        </tr>
+    </table><br>
+
+    <table th:if="${session.role == 'STAFF'}">
+        <caption>Odbijene narudžbine</caption>
+        <tr>
+            <th>Vakcina</th>
+            <th>Količina</th>
+            <th>Razlog</th>
+            <th>Datum kreiranja</th>
+        </tr>
+        <tr th:each="o : ${ordersRe}">
+            <td th:text="${o.vakcina.naziv}"></td>
+            <td th:text="${o.kolicina}"></td>
+            <td th:text="${o.napomena}"></td>
+            <td th:text="${#dates.format(o.datumKreiranja, 'dd-MM-yyyy')}"></td>
+
+        </tr>
+    </table>
+</body>
+</html>

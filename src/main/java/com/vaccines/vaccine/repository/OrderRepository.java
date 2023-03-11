@@ -10,6 +10,11 @@ import java.util.Optional;
 
 @Repository("order")
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByStatusOrStatus(EStatus status, EStatus status1);
+    List<Order> findByStatusOrStatus(EStatus status, EStatus status2);
+
+    List<Order> findByKreator_IdAndStatusOrStatus(Long id, EStatus status, EStatus status2);
+
+    List<Order> findByKreator_IdAndStatus(Long id, EStatus status);
+
     Optional<Order> findById(Long id);
 }

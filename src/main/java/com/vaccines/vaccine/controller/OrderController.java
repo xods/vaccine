@@ -1,25 +1,30 @@
 package com.vaccines.vaccine.controller;
 
 import com.vaccines.vaccine.dto.OrderDTO;
-import com.vaccines.vaccine.entity.EStatus;
-import com.vaccines.vaccine.entity.Order;
-import com.vaccines.vaccine.entity.User;
-import com.vaccines.vaccine.entity.Vakcina;
+import com.vaccines.vaccine.dto.VakcinaDTO;
+import com.vaccines.vaccine.entity.*;
 import com.vaccines.vaccine.service.OrderService;
 import com.vaccines.vaccine.service.UserService;
 import com.vaccines.vaccine.service.VakcinaService;
+import jakarta.annotation.Nullable;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController implements ServletContextAware {
 
     @Autowired
     OrderService orderService;
@@ -27,66 +32,176 @@ public class OrderController {
     VakcinaService vakcinaService;
     @Autowired
     UserService userService;
+    @Autowired
+    ServletContext servletContext;
+    private  String bURL;
 
-    @GetMapping(value = "/adminOrders")
-    public ResponseEntity<List<OrderDTO>> getAllAdmin(){
-        List<Order> orders = orderService.findByStatusOrStatus(EStatus.CREATED, EStatus.CHANGED);
-
-        List<OrderDTO> ordersDTO = new ArrayList<>();
-        for(Order o : orders){
-            ordersDTO.add(new OrderDTO(o));
-        }
-
-        return new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+    @PostConstruct
+    public void init() {
+        bURL = servletContext.getContextPath()+"/";
     }
 
-    /*
-    @GetMapping(value = "/staffOrders")
-    public ResponseEntity<List<OrderDTO>> getAllStaff(){
-        List<Order> orders = orderService.findByStatusOrStatus(EStatus.CREATED, EStatus.RETURNED);
+    @Override
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 
-        List<OrderDTO> ordersDTO = new ArrayList<>();
-        for(Order o : orders){
-            ordersDTO.add(new OrderDTO(o));
+    @GetMapping(value = "/")
+    public ModelAndView addOrder(HttpSession session, HttpServletResponse response) throws IOException {
+
+        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
+            response.sendRedirect(bURL);
         }
 
-        return new ResponseEntity<>(ordersDTO, HttpStatus.OK);
-    }*/
+        ModelAndView rezultat = new ModelAndView("orderAdd");
 
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<OrderDTO> add(@RequestBody OrderDTO orderDTO) {
+        List<Vakcina> vakcine = vakcinaService.findAll();
+        List<VakcinaDTO> vakcineDTO = new ArrayList<>();
+        for (Vakcina v : vakcine) {
+            vakcineDTO.add(new VakcinaDTO(v));
+        }
+
+        rezultat.addObject("vakcine", vakcineDTO);
+
+        return rezultat;
+    }
+
+    @GetMapping(value = "/svi")
+    public void redirekt(HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            response.sendRedirect(bURL);
+        }
+
+        if (session.getAttribute("role") == ERole.ADMIN.toString()){
+            response.sendRedirect(bURL + "order/adminOrders");
+        }else {
+            response.sendRedirect(bURL + "order/staffOrders");
+        }
+    }
+
+    @GetMapping(value = "/adminOrders")
+    public ModelAndView getAllAdmin(HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            response.sendRedirect(bURL);
+        }
+
+        List<Order> ordersCr = orderService.findByStatusOrStatus(EStatus.CREATED, EStatus.CHANGED);
+
+        ModelAndView rez = new ModelAndView("orderi");
+
+        List<OrderDTO> ordersDTOCr = new ArrayList<>();
+        for(Order o : ordersCr){
+            ordersDTOCr.add(new OrderDTO(o));
+        }
+        rez.addObject("ordersCr", ordersDTOCr);
+
+
+        return rez;
+    }
+
+    @GetMapping(value = "/staffOrders")
+    public ModelAndView getAllStaff(HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
+            response.sendRedirect(bURL);
+        }
+        User user = (User) session.getAttribute("user");
+
+        List<Order> ordersCr = orderService.findByKreator_IdAndStatusOrStatus(user.getId(), EStatus.CREATED, EStatus.CHANGED);
+        List<Order> ordersRe = orderService.findByKreator_IdAndStatus(user.getId(), EStatus.RETURNED);
+        List<Order> ordersRj = orderService.findByKreator_IdAndStatus(user.getId(), EStatus.REJECTED);
+
+        ModelAndView rez = new ModelAndView("orderi");
+
+        List<OrderDTO> ordersDTOCr = new ArrayList<>();
+        for(Order o : ordersCr){
+            ordersDTOCr.add(new OrderDTO(o));
+        }
+        rez.addObject("ordersCr", ordersDTOCr);
+
+        List<OrderDTO> ordersDTORe = new ArrayList<>();
+        for(Order o : ordersRe){
+            ordersDTORe.add(new OrderDTO(o));
+        }
+        rez.addObject("ordersRe", ordersDTORe);
+
+        List<OrderDTO> ordersDTORj = new ArrayList<>();
+        for(Order o : ordersRj){
+            ordersDTORj.add(new OrderDTO(o));
+        }
+        rez.addObject("ordersRj", ordersDTORj);
+
+        return rez;
+    }
+
+    @PostMapping(value = "/")
+    public void add(@RequestParam String vId,
+                                        @RequestParam String kolicina,
+                                        @RequestParam String razlog,
+                                        HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
+            response.sendRedirect(bURL);
+        }
         Order order = new Order();
 
-        order.setKolicina(orderDTO.getKolicina());
-        order.setRazlog(orderDTO.getRazlog());
+        order.setKolicina(Integer.valueOf(kolicina));
+        order.setRazlog(razlog);
         order.setDatumKreiranja(new Date());
         order.setStatus(EStatus.CREATED);
 
-        Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).orElse(new Vakcina());
+        Vakcina vakcina = vakcinaService.findById(Long.valueOf(vId)).orElse(new Vakcina());
         order.setVakcina(vakcina);
 
-        User user = userService.getReferenceById(orderDTO.getKreator().getId());
+        User user = (User) session.getAttribute("user");
+        user = userService.getReferenceById(user.getId());
         order.setKreator(user);
 
-        order = orderService.save(order);
+        orderService.save(order);
 
-        return new ResponseEntity<>(new OrderDTO(order), HttpStatus.CREATED);
+        response.sendRedirect(bURL + "order/svi");
     }
 
-    @PutMapping(consumes = "application/json", value = "/{id}")
-    public ResponseEntity<OrderDTO> update(@RequestBody OrderDTO orderDTO, @PathVariable("id") Long id){
-        Order order = orderService.findById(id).orElse(new Order());
+    @GetMapping(value = "/{id}")
+    public ModelAndView update(@PathVariable("id") String id, HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            response.sendRedirect(bURL);
+        }
+        ModelAndView rez = new ModelAndView("order");
 
-        order.setStatus(orderDTO.getStatus());
-        order.setNapomena(orderDTO.getNapomena());
+        Optional<Order> order = orderService.findById(Long.valueOf(id));
+        if (!order.isPresent()){
+            response.sendRedirect(bURL + "order/svi");
+        }
+        rez.addObject("order", new OrderDTO(order.get()));
 
-        if (orderDTO.getStatus().equals(EStatus.APPROVED)){
-            Vakcina vakcina = vakcinaService.findById(orderDTO.getVakcina().getId()).orElse(new Vakcina());
-            vakcina.setKolicina(vakcina.getKolicina() + orderDTO.getKolicina());
+        return rez;
+    }
+    @PostMapping(value = "/{id}")
+    public void update(@PathVariable("id") String id,
+                       @RequestParam @Nullable String kolicina,
+                       @RequestParam @Nullable String status,
+                       @RequestParam @Nullable String napomena,
+                       HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            response.sendRedirect(bURL);
+        }
+
+        Order order = orderService.findById(Long.valueOf(id)).orElse(new Order());
+
+        if(status != null){
+            order.setStatus(EStatus.valueOf(status));
+        }
+
+        if(napomena != null){
+            order.setNapomena(napomena);
+        }
+
+        if (EStatus.APPROVED.toString().equals(status)){
+            Vakcina vakcina = vakcinaService.findById(order.getVakcina().getId()).orElse(new Vakcina());
+            vakcina.setKolicina(vakcina.getKolicina() + Integer.parseInt(kolicina));
             vakcinaService.save(vakcina);
         }
         orderService.save(order);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        response.sendRedirect(bURL + "order/svi");
     }
 }
