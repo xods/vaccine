@@ -20,13 +20,15 @@ public class VakcinaPacijenta {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "doza", nullable = false)
     private EDose doza;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "datumVakcinacije", nullable = false)
     private Date datumVakcinacije;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "datumKreiranja", nullable = false)
     private Date datumKreiranja = new Date();
 

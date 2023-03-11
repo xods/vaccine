@@ -35,7 +35,8 @@ public class User implements Serializable {
 	
 	@Column(name = "prezime")
 	private String prezime;
-	
+
+	@Temporal(TemporalType.DATE)
 	@Column(name = "datum_rodjenja")
 	private Date datumRodjenja;
 	
@@ -44,7 +45,8 @@ public class User implements Serializable {
 	
 	@Column(name = "adresa")
 	private String adresa;
-	
+
+	@Temporal(TemporalType.DATE)
 	@Column(name = "datum_registracije")
 	private Date datumReg;
 

@@ -27,6 +27,7 @@ public class Order {
     @Column(name = "razlog", nullable = false)
     private String razlog;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "datum_kreiranja", nullable = false)
     private Date datumKreiranja = new Date();
 
