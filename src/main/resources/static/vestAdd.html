@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Vest</title>
+</head>
+<body>
+    <form method="post" action="/vest/">
+        <label for="naslov">Naslov</label>
+        <input id="naslov" type="text" name="naziv" value="" required><br>
+
+        <label for="sadrzaj">Sadrzaj</label>
+        <textarea id="sadrzaj" name="sadrzaj" required></textarea><br>
+
+        <input type="submit" value="Objavi">
+    </form>
+</body>
+</html>
