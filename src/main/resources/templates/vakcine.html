@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Vakcine</title>
+</head>
+<body>
+    <table>
+        <caption>Vakcine</caption>
+        <tr>
+            <th>Naziv</th>
+            <th>Kolicina</th>
+        </tr>
+        <tr th:each="v : ${vakcine}">
+            <td><a th:href="|vakcina/${v.id}|" th:text="${v.naziv}"></a></td>
+            <td th:text="${v.kolicina}"></td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Vakcina</title>
+</head>
+<body>
+    <table th:if="${session.role == 'STAFF'}">
+        <tr>
+            <th>Naziv</th>
+            <th>Količina</th>
+            <th>Proizvođač</th>
+        </tr>
+        <tr>
+            <td th:text="${vakcina.naziv}"></td>
+            <td th:text="${vakcina.kolicina}"></td>
+            <td th:text="${vakcina.proizvodjac.naziv}"></td>
+        </tr>
+    </table>
+
+    <form th:if="${session.role == 'ADMIN'}" method="put" action="/${vakcina.id}">
+        <label>Naziv</label>
+        <input type="text" th:value="${vakcina.naziv}"><br>
+        <label>Kolicina</label>
+        <label th:text="${vakcina.kolicina}"/><br>
+        <label>Proizvođač</label>
+        <select name="idP">
+            <option th:each="pr : ${proizvodjaci}" th:text="${pr.naziv}" th:value="${pr.id}" th:selected="${vakcina.proizvodjac.id == pr.id}"></option>
+        </select>
+        <input type="submit" value="Izmeni">
+    </form>
+</body>
+</html>

@@ -47,8 +47,9 @@ public class LogInOutController implements ServletContextAware {
     }
 
     @GetMapping(value = "/odjava")
-    public String logout(HttpSession session){
+    public void logout(HttpSession session, HttpServletResponse response) throws IOException {
         session.setAttribute("user", null);
-        return "index";
+        session.setAttribute("role", null);
+        response.sendRedirect(bURL);
     }
 }

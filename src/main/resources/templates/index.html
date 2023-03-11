@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Početna</title>
+</head>
+<body>
+    <ul th:if="${session.user == null}">
+        <li><a href="login.html">Prijava</a></li>
+        <li><a href="registracija.html">Registracija</a></li>
+    </ul>
+    <ul th:unless="${session.user == null}">
+       <li th:unless="${session.role == 'PATIENTS'}"><a href="vakcina/sve">Vakcine</a></li>
+        <li><a href="log/odjava">Odjava</a></li>
+    </ul>
+
+    <div>
+        <table th:if="${statistika != null}">
+            <caption>Dnevna statistika</caption>
+            <tr>
+                <th>Oboleli u 24h</th>
+                <td th:text="${statistika.oboleli24}">abc</td>
+            </tr>
+            <tr>
+                <th>Testirani u 24h</th>
+                <td th:text="${statistika.testirani24}"></td>
+            </tr>
+            <tr>
+                <th>Ukupno obolelih</th>
+                <td th:text="${statistika.ukupnoOboleli}"></td>
+            </tr>
+            <tr>
+                <th>Hospitalizovani</th>
+                <td th:text="${statistika.hospitalizovani}"></td>
+            </tr>
+            <tr>
+                <th>Na respiratoru</th>
+                <td th:text="${statistika.naRespiratoru}"></td>
+            </tr>
+        </table>
+        <h1 th:if="${statistika == null}">Nema novih vesti</h1>
+    </div><br>
+
+    <div>
+        <h1>Vesti</h1>
+        <div th:each="vest : ${vesti}">
+            <h3 th:text="${vest.naziv}"></h3>
+            <p th:text="${vest.sadrzaj}"></p>
+            <p th:text="${vest.vremeObjavljivanja}"></p>
+        </div>
+    </div>
+
+</body>
+</html>
