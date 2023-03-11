@@ -36,6 +36,7 @@ public class DnevnaStatistika {
     @Column(name = "na_respiratoru", nullable = false)
     private Integer naRespiratoru;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "vreme_objavljivanja", nullable = false)
     private Date vremeObjavljivanja;
 }

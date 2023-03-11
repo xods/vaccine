@@ -12,6 +12,7 @@
     </ul>
     <ul th:unless="${session.user == null}">
        <li th:unless="${session.role == 'PATIENTS'}"><a href="vakcina/sve">Vakcine</a></li>
+        <li th:if="${session.role == 'ADMIN' and statistika == null}"><a href="statistikaAdd.html">Dodaj statistiku</a></li>
         <li><a href="log/odjava">Odjava</a></li>
     </ul>
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Dnevna statistika</title>
+</head>
+<body>
+    <form method="post" action="/add">
+        <label for="o24">Broj obolelih u 24h</label>
+        <input id="o24" type="number" name="oboleli24" value="" required><br>
+
+        <label for="t24">Broj testiranih u 24h</label>
+        <input id="t24" type="number" name="testirani24" value="" required><br>
+
+        <label for="uo">Broj ukupno obolelih</label>
+        <input id="uo" type="number" name="ukupno" value="" required><br>
+
+        <label for="hos">Broj hospitalizovanih</label>
+        <input id="hos" type="number" name="hospitalizovani" value="" required><br>
+
+        <label for="nr">Broj pacijenata na respiratoru</label>
+        <input id="nr" type="number" name="respirator" value="" required><br>
+
+        <input type="submit" value="Objavi">
+    </form>
+</body>
+</html>
