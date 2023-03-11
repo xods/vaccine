@@ -126,8 +126,8 @@ public class VakcinaController implements ServletContextAware {
         return new ResponseEntity<>(new VakcinaDTO(vakcina), HttpStatus.CREATED);
     }
     
-    @PutMapping(value = "/{id}")
-    public ModelAndView updateVakcina(@RequestParam String naziv,
+    @PostMapping(value = "/{id}")
+    public void updateVakcina(@RequestParam String naziv,
                                       @RequestParam String idP,
                                       @PathVariable("id") String id,
                                       HttpSession session, HttpServletResponse response) throws IOException {
@@ -140,9 +140,8 @@ public class VakcinaController implements ServletContextAware {
         vakcina.setNaziv(naziv);
         vakcina.setProizvodjac(proizvodjac);
         
-        vakcina = vakcinaService.save(vakcina);
-        ModelAndView rez = new ModelAndView("vakcina");
-        rez.addObject("vakcina", new VakcinaDTO(vakcina));
-        return rez;
+        vakcinaService.save(vakcina);
+
+        response.sendRedirect(bURL + "vakcina/sve");
     }
 }

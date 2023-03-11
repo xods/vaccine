@@ -19,9 +19,9 @@
         </tr>
     </table>
 
-    <form th:if="${session.role == 'ADMIN'}" method="put" action="/${vakcina.id}">
+    <form th:if="${session.role == 'ADMIN'}" method="post" th:action="|vakcina/${vakcina.id}|">
         <label>Naziv</label>
-        <input type="text" th:value="${vakcina.naziv}"><br>
+        <input type="text" name="naziv" th:value="${vakcina.naziv}"><br>
         <label>Kolicina</label>
         <label th:text="${vakcina.kolicina}"/><br>
         <label>Proizvođač</label>
