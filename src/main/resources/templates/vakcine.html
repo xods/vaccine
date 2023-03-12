@@ -9,6 +9,7 @@
     <ul>
         <li><a href="order/svi">Narudžbenice</a></li>
         <li><a href="vestAdd.html">Dodaj vest</a></li>
+        <li th:if="${session.role == 'ADMIN'}"><a href="vakcina/add">Nova vakcina</a></li>
         <li th:if="${session.role == 'STAFF'}"><a href="order/">Nabavi vakcinu</a></li>
         <li><a href="log/odjava">Odjava</a></li>
     </ul>

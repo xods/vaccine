@@ -116,18 +116,42 @@ public class VakcinaController implements ServletContextAware {
         return rez;
     }
 
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity<VakcinaDTO> saveVakcina(@RequestBody VakcinaDTO vakcinaDTO){
-        Vakcina vakcina = new Vakcina();
-        Optional<Proizvodjac> proizvodjac = proizvodjacService.findById(vakcinaDTO.getProizvodjac().getId());
+    @GetMapping(value = "/add")
+    public ModelAndView add(HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            response.sendRedirect(bURL);
+        }
 
-        vakcina.setNaziv(vakcinaDTO.getNaziv());
+        List<Proizvodjac> proizvodjaci = proizvodjacService.findAll();
+        List<ProizvodjacDTO> proizvodjacDTOS = new ArrayList<>();
+        for (Proizvodjac p: proizvodjaci) {
+            proizvodjacDTOS.add(new ProizvodjacDTO(p));
+        }
+
+        ModelAndView rez = new ModelAndView("vakcinaAdd");
+        rez.addObject("proizvodjaci", proizvodjacDTOS);
+
+        return rez;
+    }
+
+    @PostMapping(value = "/add")
+    public void saveVakcina(@RequestParam String pId,
+                            @RequestParam String naziv,
+                            HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            response.sendRedirect(bURL);
+        }
+
+        Vakcina vakcina = new Vakcina();
+        Optional<Proizvodjac> proizvodjac = proizvodjacService.findById(Long.valueOf(pId));
+
+        vakcina.setNaziv(naziv);
         vakcina.setKolicina(0);
         vakcina.setProizvodjac(proizvodjac.orElse(new Proizvodjac()));
 
-        vakcina = vakcinaService.save(vakcina);
+        vakcinaService.save(vakcina);
 
-        return new ResponseEntity<>(new VakcinaDTO(vakcina), HttpStatus.CREATED);
+        response.sendRedirect(bURL + "vakcina/sve");
     }
     
     @PostMapping(value = "/{id}")
