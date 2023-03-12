@@ -162,13 +162,13 @@ public class OrderController implements ServletContextAware {
 
     @GetMapping(value = "/{id}")
     public ModelAndView update(@PathVariable("id") String id, HttpSession session, HttpServletResponse response) throws IOException {
-        if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+        if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
             response.sendRedirect(bURL);
         }
         ModelAndView rez = new ModelAndView("order");
 
         Optional<Order> order = orderService.findById(Long.valueOf(id));
-        if (!order.isPresent()){
+        if (order.isEmpty()){
             response.sendRedirect(bURL + "order/svi");
         }
         rez.addObject("order", new OrderDTO(order.get()));
@@ -191,14 +191,21 @@ public class OrderController implements ServletContextAware {
             order.setStatus(EStatus.valueOf(status));
         }
 
+        if (kolicina != null){
+            order.setKolicina(Integer.valueOf(kolicina));
+        }
+
         if(napomena != null){
             order.setNapomena(napomena);
         }
 
         if (EStatus.APPROVED.toString().equals(status)){
             Vakcina vakcina = vakcinaService.findById(order.getVakcina().getId()).orElse(new Vakcina());
-            vakcina.setKolicina(vakcina.getKolicina() + Integer.parseInt(kolicina));
+            vakcina.setKolicina(vakcina.getKolicina() + order.getKolicina());
             vakcinaService.save(vakcina);
+        }
+        if (session.getAttribute("role") == ERole.STAFF.toString()){
+            order.setStatus(EStatus.CHANGED);
         }
         orderService.save(order);
 
