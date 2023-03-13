@@ -11,7 +11,7 @@
         <li><a href="registracija.html">Registracija</a></li>
     </ul>
     <ul th:unless="${session.user == null}">
-       <li th:unless="${session.role == 'PATIENTS'}"><a href="vakcina/sve">Vakcine</a></li>
+       <li><a href="vakcina/sve">Vakcine</a></li>
         <li><a href="order/svi">Narudžbenice</a></li>
         <li th:if="${session.role == 'ADMIN' and statistika == null}"><a href="statistikaAdd.html">Dodaj statistiku</a></li>
         <li th:unless="${session.role == 'PATIENTS'}"><a href="vestAdd.html">Dodaj vest</a></li>

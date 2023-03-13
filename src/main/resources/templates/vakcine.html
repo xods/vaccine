@@ -19,9 +19,11 @@
             <th>Naziv</th>
             <th>Kolicina</th>
         </tr>
-        <tr th:each="v : ${vakcine}">
-            <td><a th:href="|vakcina/${v.id}|" th:text="${v.naziv}"></a></td>
+        <tr th:each="v : ${vakcine}" th:if="${session.role == 'ADMIN' or session.role == 'STAFF' or (session.role == 'PATIENTS' and v.kolicina > 0)}">
+            <td><a th:if="${session.role != 'PATIENTS'}" th:href="|vakcina/${v.id}|" th:text="${v.naziv}"></a>
+                <label th:if="${session.role == 'PATIENTS'}" th:text="${v.naziv}"></label></td>
             <td th:text="${v.kolicina}"></td>
+            <td th:if="${session.role == 'PATIENTS'}"><a th:href="|mojaVakcina/${v.id}|">prijavi se</a></td>
         </tr>
     </table>
 

@@ -13,8 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,7 +46,7 @@ public class VakcinaController implements ServletContextAware {
 
     @GetMapping(value = "/sve")
     public ModelAndView getAll(HttpSession session, HttpServletResponse response) throws IOException {
-        if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+        if(session.getAttribute("user") == null){
             response.sendRedirect(bURL);
         }
             ModelAndView rezultat = new ModelAndView("vakcine");
@@ -156,9 +154,9 @@ public class VakcinaController implements ServletContextAware {
     
     @PostMapping(value = "/{id}")
     public void updateVakcina(@RequestParam String naziv,
-                                      @RequestParam String idP,
-                                      @PathVariable("id") String id,
-                                      HttpSession session, HttpServletResponse response) throws IOException {
+                              @RequestParam String idP,
+                              @PathVariable("id") String id,
+                              HttpSession session, HttpServletResponse response) throws IOException {
 
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
             response.sendRedirect(bURL);
