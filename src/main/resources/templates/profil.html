@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title th:text="|Profil ${kor.email}|"></title>
+</head>
+<body>
+    <form method="post" th:action="@{|user/${kor.email}|}">
+        <label for="ime">Ime</label>
+        <input type="text" id="ime" name="ime" th:value="${kor.ime}" required><br>
+
+        <label for="prezime">Prezime</label>
+        <input type="text" id="prezime" name="prezime" th:value="${kor.prezime}" required><br>
+
+        <label>Email</label>
+        <label th:text="${kor.email}"></label><br>
+
+        <label for="password">Šifra</label>
+        <input type="password" id="password" name="password" value=""><br>
+
+        <label for="password2">Potvrdi šifru</label>
+        <input type="password" id="password2" name="password2" value=""><br>
+
+        <label for="JMBG">Matični broj</label>
+        <input type="text" id="JMBG" name="JMBG" th:value="${kor.JMBG}" minlength="13" maxlength="13" pattern="[0-9]{13}" required><br>
+
+        <label for="datumRodjenja">Datum rođenja</label>
+        <input type="date" id="datumRodjenja" name="datumRodjenja" th:value="${kor.datumRodjenja}" pattern="dd/MM/yyyy" required><br>
+
+        <label for="adresa">Adresa</label>
+        <input type="text" id="adresa" name="adresa" th:value="${kor.adresa}" required><br>
+
+        <label>Datum registracije</label>
+        <label th:text="${#dates.format(kor.datumReg, 'dd/MM/yyyy')}" ></label><br>
+
+        <label></label>
+        <label th:text="${kor.uloga}"></label><br>
+        <input type="submit" value="Izmeni">
+
+    </form>
+    <table th:if="${session.role == 'PATIENTS'}">
+        <caption>Primljene vakcine</caption>
+        <tr>
+            <th>Vakcina</th>
+            <th>Doza</th>
+            <th>Datum vakcinacije</th>
+        </tr>
+        <tr th:each="p : ${primljene}">
+            <th th:text="${p.vakcina.naziv}"></th>
+            <th th:text="${p.doza}"></th>
+            <th th:text="${p.datumVakcinacije}"></th>
+        </tr>
+    </table><br>
+    <table th:if="${session.role == 'PATIENTS'}">
+        <caption>Aktivne prijave za vakcinaciju</caption>
+        <tr>
+            <th>Vakcina</th>
+            <th>Doza</th>
+            <th>Datum vakcinacije</th>
+        </tr>
+        <tr th:each="p : ${aktivne}">
+            <th th:text="${p.vakcina.naziv}"></th>
+            <th th:text="${p.doza}"></th>
+            <th th:text="${p.datumVakcinacije}"></th>
+        </tr>
+    </table>
+</body>
+</html>

@@ -16,5 +16,5 @@ public interface VakcinaPacijentaService {
     List<VakcinaPacijenta> findByUser_IdAndStatusAndDoza(Long id, EStatus status, EDose doza);
     void saveAll(List<VakcinaPacijenta> list);
     List<VakcinaPacijenta> findByUser_ImeContainsIgnoreCaseOrUser_PrezimeContainsIgnoreCaseOrUser_JMBGContainsIgnoreCase(String ime, String prezime, String JMBG);
-
+    List<VakcinaPacijenta> findByIdAndStatus(Long id, EStatus status);
 }

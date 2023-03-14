@@ -2,23 +2,25 @@ package com.vaccines.vaccine.controller;
 
 import com.vaccines.vaccine.dto.UserDTO;
 import com.vaccines.vaccine.entity.ERole;
+import com.vaccines.vaccine.entity.EStatus;
 import com.vaccines.vaccine.entity.User;
+import com.vaccines.vaccine.entity.VakcinaPacijenta;
 import com.vaccines.vaccine.service.UserService;
+import com.vaccines.vaccine.service.VakcinaPacijentaService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -26,6 +28,8 @@ public class UserController implements ServletContextAware {
 
     @Autowired
     UserService userService;
+    @Autowired
+    VakcinaPacijentaService vakcinaPacijentaService;
     @Autowired
     ServletContext servletContext;
     private  String bURL;
@@ -38,6 +42,27 @@ public class UserController implements ServletContextAware {
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
+    }
+
+    @GetMapping()
+    public ModelAndView getUser(HttpSession session, HttpServletResponse response) throws IOException {
+
+        if(session.getAttribute("user") == null){
+            response.sendRedirect(bURL);
+        }
+
+        ModelAndView rez = new ModelAndView("profil");
+
+        User user = (User) session.getAttribute("user");
+        rez.addObject("kor", user);
+
+        List<VakcinaPacijenta> primljene = vakcinaPacijentaService.findByIdAndStatus(user.getId(), EStatus.APPROVED);
+        rez.addObject("primljene", primljene);
+
+        List<VakcinaPacijenta> aktivne = vakcinaPacijentaService.findByIdAndStatus(user.getId(), EStatus.CREATED);
+        rez.addObject("aktivne", aktivne);
+
+        return rez;
     }
 
     @PostMapping()
@@ -71,6 +96,47 @@ public class UserController implements ServletContextAware {
         user.setAdresa(adresa);
         user.setDatumReg(new Date());
         user.setUloga(ERole.PATIENTS);
+
+        user = userService.save(user);
+
+        if(user != null){
+            session.setAttribute("user", user);
+            session.setAttribute("role", user.getUloga().toString());
+            session.setAttribute("message", "success");
+        }
+
+        response.sendRedirect(bURL);
+    }
+
+    @PostMapping("/{email}")
+    public void edit(@PathVariable("email") String email,
+                     @RequestParam String password,
+                     @RequestParam String password2,
+                     @RequestParam String ime,
+                     @RequestParam String prezime,
+                     @RequestParam String JMBG,
+                     @RequestParam String adresa,
+                     @RequestParam String datumRodjenja,
+                     HttpSession session, HttpServletResponse response) throws IOException, ParseException {
+
+        User user = (User) session.getAttribute("user");
+
+        if (user == null || !password.equals(password2)){
+            session.setAttribute("message", "failure");
+            response.sendRedirect(bURL+"registracija.html");
+            return;
+        }
+
+        if(!password.equals("")){
+            user.setPassword(password);
+        }
+
+        user.setIme(ime);
+        user.setPrezime(prezime);
+        user.setDatumRodjenja(new SimpleDateFormat("yyyy-dd-MM").parse(datumRodjenja));
+        user.setJMBG(JMBG);
+        user.setAdresa(adresa);
+        user.setDatumReg(new Date());
 
         user = userService.save(user);
 

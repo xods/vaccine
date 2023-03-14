@@ -44,4 +44,7 @@ public class VakcinaPacijentaServiceImpl implements VakcinaPacijentaService {
     public List<VakcinaPacijenta> findByUser_ImeContainsIgnoreCaseOrUser_PrezimeContainsIgnoreCaseOrUser_JMBGContainsIgnoreCase(String ime, String prezime, String JMBG){
         return repository.findByUser_ImeContainsIgnoreCaseOrUser_PrezimeContainsIgnoreCaseOrUser_JMBGContainsIgnoreCase(ime, prezime, JMBG);
     }
+    public List<VakcinaPacijenta> findByIdAndStatus(Long id, EStatus status){
+        return repository.findByIdAndStatus(id, status);
+    }
 }

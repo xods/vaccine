@@ -18,4 +18,6 @@ public interface VakcinaPacijentaRepository extends JpaRepository<VakcinaPacijen
 
     List<VakcinaPacijenta> findByUser_ImeContainsIgnoreCaseOrUser_PrezimeContainsIgnoreCaseOrUser_JMBGContainsIgnoreCase(String ime, String prezime, String JMBG);
 
+    List<VakcinaPacijenta> findByIdAndStatus(Long id, EStatus status);
+
 }
