@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <base th:href="@{/}">
+    <title>Prijave za vakcinaciju</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Pacijent</th>
+            <th>Vakcina</th>
+            <th>Doza</th>
+        </tr>
+        <tr th:each="p : ${prijave}">
+            <td th:text="|${p.user.ime} ${p.user.prezime} ${p.user.JMBG}|"></td>
+            <td th:text="${p.vakcina.naziv}"></td>
+            <th th:text="${p.doza}"></th>
+            <th th:if="${#dates.createNow() >= p.datumVakcinacije}"><a th:href="@{/prijave/vakcinisi(pId=${p.id})}">Daj vakcinu</a></th>
+        </tr>
+    </table>
+
+    <form method="post" action="prijave/search">
+        <input name="term" value="" required type="search">
+        <input type="submit" value="Pretrazi">
+    </form>
+</body>
+</html>

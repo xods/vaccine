@@ -2,10 +2,9 @@ package com.vaccines.vaccine.controller;
 
 import com.vaccines.vaccine.dto.ProizvodjacDTO;
 import com.vaccines.vaccine.dto.VakcinaDTO;
-import com.vaccines.vaccine.entity.ERole;
-import com.vaccines.vaccine.entity.Proizvodjac;
-import com.vaccines.vaccine.entity.Vakcina;
+import com.vaccines.vaccine.entity.*;
 import com.vaccines.vaccine.service.ProizvodjacService;
+import com.vaccines.vaccine.service.VakcinaPacijentaService;
 import com.vaccines.vaccine.service.VakcinaService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletContext;
@@ -29,6 +28,8 @@ public class VakcinaController implements ServletContextAware {
     @Autowired
     VakcinaService vakcinaService;
     @Autowired
+    VakcinaPacijentaService vakcinaPacijentaService;
+    @Autowired
     ProizvodjacService proizvodjacService;
     @Autowired
     ServletContext servletContext;
@@ -49,17 +50,22 @@ public class VakcinaController implements ServletContextAware {
         if(session.getAttribute("user") == null){
             response.sendRedirect(bURL);
         }
-            ModelAndView rezultat = new ModelAndView("vakcine");
+        User user = (User) session.getAttribute("user");
+        List<VakcinaPacijenta> listaPrimljenih = vakcinaPacijentaService.findByUser_IdAndStatusOrderByDatumVakcinacijeAsc(user.getId(), EStatus.APPROVED);
+        int brDoza = listaPrimljenih.size();
 
-            List<Vakcina> vakcine = vakcinaService.findAll();
-            List<VakcinaDTO> vakcineDTO = new ArrayList<>();
-            for (Vakcina v : vakcine) {
-                vakcineDTO.add(new VakcinaDTO(v));
-            }
+        ModelAndView rezultat = new ModelAndView("vakcine");
 
-            rezultat.addObject("vakcine", vakcineDTO);
+        List<Vakcina> vakcine = vakcinaService.findAll();
+        List<VakcinaDTO> vakcineDTO = new ArrayList<>();
+        for (Vakcina v : vakcine) {
+            vakcineDTO.add(new VakcinaDTO(v));
+        }
 
-            return rezultat;
+        rezultat.addObject("vakcine", vakcineDTO);
+        rezultat.addObject("brDoza", brDoza);
+
+        return rezultat;
 
     }
 

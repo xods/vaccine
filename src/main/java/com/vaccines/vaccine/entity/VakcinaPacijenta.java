@@ -32,7 +32,7 @@ public class VakcinaPacijenta {
     @Column(name = "datumKreiranja", nullable = false)
     private Date datumKreiranja = new Date();
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private EStatus status;
 

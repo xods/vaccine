@@ -9,18 +9,16 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mojaVakcina")
+@RequestMapping("/prijave")
 public class VakcinaPacijentaController implements ServletContextAware {
 
     @Autowired
@@ -84,6 +82,60 @@ public class VakcinaPacijentaController implements ServletContextAware {
 
         vakcinaPacijentaService.save(vakcinaPacijenta);
 
+
         response.sendRedirect(bURL);
+    }
+
+    @GetMapping(value = "/sve")
+    public ModelAndView sve(HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || (session.getAttribute("role") != ERole.STAFF.toString())){
+            response.sendRedirect(bURL);
+        }
+
+        ModelAndView rez = new ModelAndView("prijave");
+
+        List<VakcinaPacijenta> prijave = vakcinaPacijentaService.findByStatus(EStatus.CREATED);
+        rez.addObject("prijave", prijave);
+
+        return rez;
+    }
+
+    @GetMapping(value = "/vakcinisi")
+    public void vakcinisi(@RequestParam("pId") String pId,
+                          HttpSession session, HttpServletResponse response) throws IOException {
+        if(session.getAttribute("user") == null || (session.getAttribute("role") != ERole.STAFF.toString())){
+            response.sendRedirect(bURL);
+        }
+        VakcinaPacijenta vakcinaPacijenta = vakcinaPacijentaService.findById(Long.valueOf(pId)).orElse(new VakcinaPacijenta());
+        Vakcina vakcina = vakcinaService.findById(vakcinaPacijenta.getVakcina().getId()).orElse(new Vakcina());
+        User user = userService.getReferenceById(vakcinaPacijenta.getUser().getId());
+
+        vakcinaPacijenta.setStatus(EStatus.APPROVED);
+        vakcinaPacijenta.setDatumVakcinacije(new Date());
+        vakcinaPacijentaService.save(vakcinaPacijenta);
+
+        List<VakcinaPacijenta> prijave = vakcinaPacijentaService.findByUser_IdAndStatusAndDoza(user.getId(), EStatus.CREATED, vakcinaPacijenta.getDoza());
+        for(VakcinaPacijenta p : prijave){
+            p.setStatus(EStatus.REJECTED);
+        }
+        vakcinaPacijentaService.saveAll(prijave);
+
+        vakcina.setKolicina(vakcina.getKolicina()-1);
+        vakcinaService.save(vakcina);
+
+        response.sendRedirect(bURL + "prijave/sve");
+    }
+
+    @PostMapping(value = "/search")
+    public ModelAndView search(@RequestParam String term,
+                               HttpSession session, HttpServletResponse response){
+
+        ModelAndView rez = new ModelAndView("prijave");
+        List<VakcinaPacijenta> prijave = vakcinaPacijentaService.findByUser_ImeContainsIgnoreCaseOrUser_PrezimeContainsIgnoreCaseOrUser_JMBGContainsIgnoreCase(term, term, term);
+        prijave.removeIf(p -> p.getStatus() != EStatus.CREATED);
+
+        rez.addObject("prijave", prijave);
+
+        return rez;
     }
 }

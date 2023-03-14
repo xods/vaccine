@@ -23,7 +23,7 @@
             <td><a th:if="${session.role != 'PATIENTS'}" th:href="|vakcina/${v.id}|" th:text="${v.naziv}"></a>
                 <label th:if="${session.role == 'PATIENTS'}" th:text="${v.naziv}"></label></td>
             <td th:text="${v.kolicina}"></td>
-            <td th:if="${session.role == 'PATIENTS'}"><a th:href="|mojaVakcina/${v.id}|">prijavi se</a></td>
+            <td th:if="${session.role == 'PATIENTS' and brDoza < 4 }"><a th:href="|prijave/${v.id}|">prijavi se</a></td>
         </tr>
     </table>
 
