@@ -6,6 +6,11 @@
     <title>Vakcina</title>
 </head>
 <body>
+    <ul>
+        <li><a href="/">Početna</a></li>
+        <li><a href="user">Moj profil</a></li>
+        <li><a href="log/odjava">Odjava</a></li>
+    </ul>
     <form method="post" action="vakcina/add">
         <select name="pId" required>
             <option th:each="p : ${proizvodjaci}" th:value="${p.id}" th:text="${p.naziv}"></option>

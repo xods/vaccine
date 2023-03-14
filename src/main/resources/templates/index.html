@@ -11,11 +11,12 @@
         <li><a href="registracija.html">Registracija</a></li>
     </ul>
     <ul th:unless="${session.user == null}">
-       <li><a href="vakcina/sve">Vakcine</a></li>
+        <li><a href="/">Početna</a></li>
+        <li th:if="${session.role == 'ADMIN' and statistika == null}"><a href="statistikaAdd.html">Dodaj statistiku</a></li>
+        <li th:unless="${session.role == 'PATIENTS'}"><a th:href="vestAdd.html">Dodaj vest</a></li>
+        <li><a href="vakcina/sve">Vakcine</a></li>
         <li th:if="${session.role == 'STAFF'}"><a href="prijave/sve">Prijave za vakcinaciju</a></li>
         <li th:unless="${session.role == 'PATIENTS'}"><a href="order/svi">Narudžbenice</a></li>
-        <li th:if="${session.role == 'ADMIN' and statistika == null}"><a href="statistikaAdd.html">Dodaj statistiku</a></li>
-        <li th:unless="${session.role == 'PATIENTS'}"><a href="vestAdd.html">Dodaj vest</a></li>
         <li><a href="user">Moj profil</a></li>
         <li><a href="log/odjava">Odjava</a></li>
     </ul>

@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <base th:href="@{/}">
+    <base href="/">
     <title>Vest</title>
 </head>
 <body>
+    <ul>
+        <li><a href="/">Početna</a></li>
+        <li><a href="user">Moj profil</a></li>
+        <li><a href="log/odjava">Odjava</a></li>
+    </ul>
+
     <form method="post" action="/vest/">
         <label for="naslov">Naslov</label>
         <input id="naslov" type="text" name="naziv" value="" required><br>
