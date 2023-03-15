@@ -2,24 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <base th:href="@{/}">
+    <base th:href="@{/}"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <title th:text="|Profil ${kor.email}|"></title>
 </head>
 <body>
-    <ul th:if="${session.user == null}">
-        <li><a href="login.html">Prijava</a></li>
-        <li><a href="registracija.html">Registracija</a></li>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:if="${session.user == null}">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"><a class="nav-link" href="login.html">Prijava</a></li>
+        <li class="nav-item active"><a class="nav-link" href="registracija.html">Registracija</a></li>
     </ul>
-    <ul th:unless="${session.user == null}">
-        <li><a href="/">Početna</a></li>
-        <li th:if="${session.role == 'ADMIN' and statistika == null}"><a href="statistikaAdd.html">Dodaj statistiku</a></li>
-        <li th:unless="${session.role == 'PATIENTS'}"><a href="vestAdd.html">Dodaj vest</a></li>
-        <li><a href="vakcina/sve">Vakcine</a></li>
-        <li th:if="${session.role == 'STAFF'}"><a href="prijave/sve">Prijave za vakcinaciju</a></li>
-        <li th:unless="${session.role == 'PATIENTS'}"><a href="order/svi">Narudžbenice</a></li>
-        <li><a href="user">Moj profil</a></li>
-        <li><a href="log/odjava">Odjava</a></li>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:unless="${session.user == null}">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item active"><a class="nav-link" href="/">Početna</a></li>
+        <li class="nav-item active" th:if="${session.role == 'ADMIN' and statistika == null}"><a class="nav-link" href="statistikaAdd.html">Dodaj statistiku</a></li>
+        <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" th:href="vestAdd.html">Dodaj vest</a></li>
+        <li class="nav-item active"><a class="nav-link" href="vakcina/sve">Vakcine</a></li>
+        <li class="nav-item active" th:if="${session.role == 'STAFF'}"><a class="nav-link" href="prijave/sve">Prijave za vakcinaciju</a></li>
+        <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" href="order/svi">Narudžbenice</a></li>
+        <li class="nav-item active"><a class="nav-link" href="user">Moj profil</a></li>
+        <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
     </ul>
+</nav>
     <form method="post" th:action="@{|user/${kor.email}|}">
         <label for="ime">Ime</label>
         <input type="text" id="ime" name="ime" th:value="${kor.ime}" required><br>
