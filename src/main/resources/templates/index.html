@@ -33,27 +33,26 @@
         </ul>
     </nav>
 
-    <div class="container-fluid card-body text-center" >
-        <table th:if="${statistika != null}">
-            <caption>Dnevna statistika</caption>
+    <div class="container-fluid card-body text-left my-5 fs-3"  th:if="${statistika != null}">
+        <table class="d-flex justify-content-center">
             <tr>
-                <th>Oboleli u 24h</th>
+                <th>Oboleli u 24h: </th>
                 <td th:text="${statistika.oboleli24}">abc</td>
             </tr>
             <tr>
-                <th>Testirani u 24h</th>
+                <th>Testirani u 24h: </th>
                 <td th:text="${statistika.testirani24}"></td>
             </tr>
             <tr>
-                <th>Ukupno obolelih</th>
+                <th>Ukupno obolelih: </th>
                 <td th:text="${statistika.ukupnoOboleli}"></td>
             </tr>
             <tr>
-                <th>Hospitalizovani</th>
+                <th>Hospitalizovani: </th>
                 <td th:text="${statistika.hospitalizovani}"></td>
             </tr>
             <tr>
-                <th>Na respiratoru</th>
+                <th>Na respiratoru: </th>
                 <td th:text="${statistika.naRespiratoru}"></td>
             </tr>
         </table>
