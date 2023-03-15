@@ -3,32 +3,51 @@
 <head>
     <base href="/">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="icon" href="/img/img.png" type="image/icon type">
     <title>Dnevna statistika</title>
 </head>
 <body>
-    <ul>
-        <li><a href="/">Početna</a></li>
-        <li><a href="user">Moj profil</a></li>
-        <li><a href="log/odjava">Odjava</a></li>
-    </ul>
+    <nav  class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="/">Početna</a></li>
+            <li class="nav-item active"><a class="nav-link" href="user">Moj profil</a></li>
+            <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
+        </ul>
+    </nav>
 
-    <form method="post" action="/add">
-        <label for="o24">Broj obolelih u 24h</label>
-        <input id="o24" type="number" name="oboleli24" value="" required><br>
+    <form class="align-self-center col-6 container-fluid mt-5 text-center" method="post" action="/add">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <input class="form-control" id="o24" type="number" name="oboleli24" value="" required>
+                <label class="form-label" for="o24">Broj obolelih u 24h</label>
+            </div>
 
-        <label for="t24">Broj testiranih u 24h</label>
-        <input id="t24" type="number" name="testirani24" value="" required><br>
+            <div class="form-group col-md-6">
+                <input class="form-control" id="t24" type="number" name="testirani24" value="" required>
+                <label class="form-label" for="t24">Broj testiranih u 24h</label>
+            </div>
+        </div>
 
-        <label for="uo">Broj ukupno obolelih</label>
-        <input id="uo" type="number" name="ukupno" value="" required><br>
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input class="form-control" id="uo" type="number" name="ukupno" value="" required>
+                <label class="form-label" for="uo">Broj ukupno obolelih</label>
+            </div>
 
-        <label for="hos">Broj hospitalizovanih</label>
-        <input id="hos" type="number" name="hospitalizovani" value="" required><br>
+            <div class="form-group col-md-4">
+                <input class="form-control" id="hos" type="number" name="hospitalizovani" value="" required>
+                <label class="form-label" for="hos">Broj hospitalizovanih</label>
+            </div>
 
-        <label for="nr">Broj pacijenata na respiratoru</label>
-        <input id="nr" type="number" name="respirator" value="" required><br>
+            <div class="form-group col-md-4">
+                <input class="form-control" id="nr" type="number" name="respirator" value="" required>
+                <label class="form-label" for="nr">Broj pacijenata na respiratoru</label>
+            </div>
+        </div>
 
-        <input type="submit" value="Objavi">
+        <input type="submit" value="Objavi" class="btn btn-primary btn-block my-4">
     </form>
 </body>
 </html>
