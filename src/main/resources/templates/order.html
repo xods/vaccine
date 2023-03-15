@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <base th:href="@{/}"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <base th:href="@{/}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="icon" href="/img/img.png" type="image/icon type">
     <title>Order</title>
 </head>
 <body>
@@ -25,30 +27,39 @@
         <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
     </ul>
 </nav>
-    <form method="post" th:action="|order/${order.id}|">
-        <label>Vakcina</label>
-        <label th:text="${order.vakcina.naziv}"></label><br>
-
-        <label for="kol">Količina</label>
-        <input id="kol" name="kolicina" type="number" th:if="${session.role == 'STAFF'}" min="1" th:value="${order.kolicina}"><br>
-        <p th:if="${session.role == 'ADMIN'}" th:text="${order.kolicina}"></p>
-
-        <label>Razlog nabavke</label>
-        <p id="rz" name="razlog" th:value="${order.razlog}" required></p><br>
-
-        <fieldset th:if="${session.role == 'ADMIN'}">
-            <legend>Status</legend>
-            <div th:each="status : ${T(com.vaccines.vaccine.entity.EStatus).values()}">
-                <input name="status" type="radio" th:value="${status}" th:checked="${status == order.status}">
-                <label th:text="${status}"></label>
+    <form class="align-self-center col-6 container-fluid mt-5 text-center" method="post" th:action="|order/${order.id}|">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <input class="form-control" id="naziv" th:value="${order.vakcina.naziv}" readonly/>
+                <label class="form-label" for="naziv">Vakcina</label>
             </div>
-        </fieldset>
+            <div class="form-group col-md-6">
+                <input class="form-control" id="kol" name="kolicina" type="number" th:readonly="${session.role == 'ADMIN'}" min="1" th:value="${order.kolicina}">
+                <label class="form-label" for="kol">Količina</label>
+            </div>
+        </div>
 
-        <label>Napomena</label>
-        <p th:if="${session.role == 'STAFF'}" th:text="${order.napomena}"></p>
-        <textarea name="napomena" th:value="${order.napomena}" th:if="${session.role == 'ADMIN'}"></textarea>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <textarea class="form-control" readonly id="rz" th:text="${order.razlog}"></textarea>
+                <label class="form-label" for="rz">Razlog nabavke</label>
+            </div>
+        </div>
 
-        <input type="submit" value="Obradi">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <select class="form-select" id="status" name="status">
+                    <option th:each="status : ${T(com.vaccines.vaccine.entity.EStatus).values()}" th:text="${status}" th:value="${status}" th:selected="${status == order.status}"></option>
+                </select>
+                <label class="form-label" for="status">Status</label>
+            </div>
+            <div class="form-group col-md-8">
+                <textarea class="form-control" id="nap" name="napomena" th:value="${order.napomena}" th:readonly="${session.role == 'STAFF'}"></textarea>
+                <label class="form-label" for="nap">Napomena</label>
+            </div>
+        </div>
+
+        <input class="btn btn-primary btn-block my-4" type="submit" value="Obradi">
     </form>
 </body>
 </html>
