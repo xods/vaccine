@@ -16,14 +16,21 @@
         </ul>
     </nav>
 
-    <form method="post" action="/vest/">
-        <label for="naslov">Naslov</label>
-        <input id="naslov" type="text" name="naziv" value="" required><br>
+    <form class="align-self-center col-6 container-fluid mt-5 text-center" method="post" action="/vest/">
+        <div class="row">
+            <div class="form-group col-md-12">
+                <input class="form-control" id="naslov" type="text" name="naziv" value="" required>
+                <label class="form-label" for="naslov">Naslov</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <textarea class="form-control" id="sadrzaj" name="sadrzaj" required></textarea>
+                <label class="form-label" for="sadrzaj">Sadrzaj</label>
+            </div>
+        </div>
 
-        <label for="sadrzaj">Sadrzaj</label>
-        <textarea id="sadrzaj" name="sadrzaj" required></textarea><br>
-
-        <input type="submit" value="Objavi">
+        <input class="btn btn-primary btn-block mb-4" type="submit" value="Objavi">
     </form>
 </body>
 </html>
