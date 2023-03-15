@@ -38,7 +38,8 @@
             <td th:if="${session.role == 'PATIENTS' and brDoza < 4 }"><a th:href="|prijave/${v.id}|">prijavi se</a></td>
         </tr>
     </table>
-   <a class="btn btn-primary btn-block my-4" href="order/">Naruči vakcinu</a>
+    <a class="btn btn-primary btn-block my-4" href="order/">Naruči vakcinu</a>
+    <a th:if="${session.role == 'ADMIN'}" class="btn btn-primary btn-block my-4" href="vakcina/add">Dodaj vakcinu</a>
     <form method="post" action="/vakcina/search">
         <label for="s">Pretraga</label>
         <input id="s" type="search" value="" name="term" required><br>
