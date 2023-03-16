@@ -103,6 +103,7 @@ public class OrderController implements ServletContextAware {
     public ModelAndView getAllStaff(HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
             response.sendRedirect(bURL);
+            return null;
         }
         User user = (User) session.getAttribute("user");
 
@@ -135,9 +136,9 @@ public class OrderController implements ServletContextAware {
 
     @PostMapping(value = "/")
     public void add(@RequestParam String vId,
-                                        @RequestParam String kolicina,
-                                        @RequestParam String razlog,
-                                        HttpSession session, HttpServletResponse response) throws IOException {
+                    @RequestParam String kolicina,
+                    @RequestParam String razlog,
+                    HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
             response.sendRedirect(bURL);
         }
