@@ -13,41 +13,56 @@
         <li class="nav-item active"><a class="nav-link" href="registracija.html">Registracija</a></li>
     </ul>
 </nav>
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:unless="${session.user == null}">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"><a class="nav-link" href="/">Početna</a></li>
-        <li class="nav-item active" th:if="${session.role == 'ADMIN' and statistika == null}"><a class="nav-link" href="statistikaAdd.html">Dodaj statistiku</a></li>
-        <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" th:href="vestAdd.html">Dodaj vest</a></li>
-        <li class="nav-item active"><a class="nav-link" href="vakcina/sve">Vakcine</a></li>
-        <li class="nav-item active" th:if="${session.role == 'STAFF'}"><a class="nav-link" href="prijave/sve">Prijave za vakcinaciju</a></li>
-        <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" href="order/svi">Narudžbenice</a></li>
-        <li class="nav-item active"><a class="nav-link" href="user">Moj profil</a></li>
-        <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
-    </ul>
-</nav>
-    <table th:if="${session.role == 'STAFF'}">
-        <tr>
-            <th>Naziv</th>
-            <th>Količina</th>
-            <th>Proizvođač</th>
-        </tr>
-        <tr>
-            <td th:text="${vakcina.naziv}"></td>
-            <td th:text="${vakcina.kolicina}"></td>
-            <td th:text="${vakcina.proizvodjac.naziv}"></td>
-        </tr>
-    </table>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" th:unless="${session.user == null}">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="/">Početna</a></li>
+            <li class="nav-item active" th:if="${session.role == 'ADMIN' and statistika == null}"><a class="nav-link" href="statistikaAdd.html">Dodaj statistiku</a></li>
+            <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" th:href="vestAdd.html">Dodaj vest</a></li>
+            <li class="nav-item active"><a class="nav-link" href="vakcina/sve">Vakcine</a></li>
+            <li class="nav-item active" th:if="${session.role == 'STAFF'}"><a class="nav-link" href="prijave/sve">Prijave za vakcinaciju</a></li>
+            <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" href="order/svi">Narudžbenice</a></li>
+            <li class="nav-item active"><a class="nav-link" href="user">Moj profil</a></li>
+            <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
+        </ul>
+    </nav>
 
-    <form th:if="${session.role == 'ADMIN'}" method="post" th:action="|vakcina/${vakcina.id}|">
-        <label>Naziv</label>
-        <input type="text" name="naziv" th:value="${vakcina.naziv}"><br>
-        <label>Kolicina</label>
-        <label th:text="${vakcina.kolicina}"/><br>
-        <label>Proizvođač</label>
-        <select name="idP">
-            <option th:each="pr : ${proizvodjaci}" th:text="${pr.naziv}" th:value="${pr.id}" th:selected="${vakcina.proizvodjac.id == pr.id}"></option>
-        </select>
-        <input type="submit" value="Izmeni">
+    <div th:if="${session.role == 'STAFF'}" class="align-self-center col-6 container-fluid mt-5 text-center">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input class="form-control" id="proizvodjac" type="text" th:value="${vakcina.proizvodjac.naziv}" readonly>
+                <label lass="form-label" for="proizvodjac">Proizvođač</label>
+            </div>
+            <div class="form-group col-md-4">
+                <input class="form-control" id="naziv" type="text" th:value="${vakcina.naziv}" readonly>
+                <label lass="form-label" for="naziv">Naziv</label>
+            </div>
+            <div class="form-group col-md-4">
+                <input class="form-control" id="kolicina" type="text" th:value="${vakcina.kolicina}" readonly>
+                <label lass="form-label" for="kolicina">Količina</label>
+            </div>
+        </div>
+    </div>
+
+    <form class="align-self-center col-6 container-fluid mt-5 text-center"  th:if="${session.role == 'ADMIN'}" method="post" th:action="|vakcina/${vakcina.id}|">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <select id="pId2" class="form-control" name="pId" required>
+                    <option th:each="p : ${proizvodjaci}" th:value="${p.id}" th:text="${p.naziv}"></option>
+                </select>
+                <label class="form-label" for="naziv">Proizvođač</label>
+            </div>
+            <div class="form-group col-md-4">
+                <input class="form-control" id="naziv2" name="naziv" type="text" th:value="${vakcina.naziv}" required>
+                <label class="form-label" for="naziv2">Naziv</label>
+            </div>
+            <div class="form-group col-md-4">
+                <input class="form-control" id="kolicina2" type="number" th:value="${vakcina.kolicina}" readonly/>
+                <label class="form-label" for="kolicina2">Kolicina</label>
+            </div>
+        </div>
+
+        <input class="btn btn-primary btn-block my-4" type="submit" value="Izmeni">
     </form>
+
 </body>
 </html>

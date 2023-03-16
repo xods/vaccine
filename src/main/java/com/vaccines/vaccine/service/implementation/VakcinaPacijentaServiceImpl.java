@@ -36,7 +36,6 @@ public class VakcinaPacijentaServiceImpl implements VakcinaPacijentaService {
 
         return repository.findByUser_IdAndStatusAndDoza(id, status, doza);
     }
-
     public void saveAll(List<VakcinaPacijenta> list) {
         repository.saveAll(list);
     }
