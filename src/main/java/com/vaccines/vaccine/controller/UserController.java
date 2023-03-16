@@ -56,10 +56,10 @@ public class UserController implements ServletContextAware {
         User user = (User) session.getAttribute("user");
         rez.addObject("kor", user);
 
-        List<VakcinaPacijenta> primljene = vakcinaPacijentaService.findByIdAndStatus(user.getId(), EStatus.APPROVED);
+        List<VakcinaPacijenta> primljene = vakcinaPacijentaService.findByUser_IdAndStatusOrderByDatumVakcinacijeAsc(user.getId(), EStatus.APPROVED);
         rez.addObject("primljene", primljene);
 
-        List<VakcinaPacijenta> aktivne = vakcinaPacijentaService.findByIdAndStatus(user.getId(), EStatus.CREATED);
+        List<VakcinaPacijenta> aktivne = vakcinaPacijentaService.findByUser_IdAndStatusOrderByDatumVakcinacijeAsc(user.getId(), EStatus.CREATED);
         rez.addObject("aktivne", aktivne);
 
         return rez;
