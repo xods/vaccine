@@ -40,7 +40,7 @@
             </thead>
 
             <tbody>
-                <tr th:each="p : ${prijave}">
+                <tr th:each="p : ${prijavePr}">
                     <td th:text="|${p.user.ime} ${p.user.prezime} ${p.user.JMBG}|"></td>
                     <td th:text="${p.vakcina.naziv}"></td>
                     <th th:text="${p.doza}"></th>

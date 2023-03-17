@@ -6,6 +6,7 @@ import com.vaccines.vaccine.entity.*;
 import com.vaccines.vaccine.service.ProizvodjacService;
 import com.vaccines.vaccine.service.VakcinaPacijentaService;
 import com.vaccines.vaccine.service.VakcinaService;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletResponse;
@@ -74,13 +75,15 @@ public class VakcinaController implements ServletContextAware {
                                 @RequestParam Integer mi,
                                 @RequestParam Integer mx,
                                 @RequestParam String s,
-                                @RequestParam Boolean u,
+                                @RequestParam @Nullable Boolean u,
                                 HttpSession session, HttpServletResponse response) throws IOException {
-        if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+        if(session.getAttribute("user") == null){
             response.sendRedirect(bURL);
         }
 
         Sort sort = s.equals("naziv") || s.equals("proizvodjac.naziv") || s.equals("proizvodjac.drzava") || s.equals("kolicina")? Sort.by(s): null;
+
+        u = (u != null) ? u : false;
 
         if (sort != null) {
             sort = u ? sort.ascending() : sort.descending();

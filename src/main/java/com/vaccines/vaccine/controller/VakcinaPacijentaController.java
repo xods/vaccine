@@ -95,7 +95,7 @@ public class VakcinaPacijentaController implements ServletContextAware {
         ModelAndView rez = new ModelAndView("prijave");
 
         List<VakcinaPacijenta> prijave = vakcinaPacijentaService.findByStatus(EStatus.CREATED);
-        rez.addObject("prijave", prijave);
+        rez.addObject("prijavePr", prijave);
 
         return rez;
     }
@@ -134,7 +134,7 @@ public class VakcinaPacijentaController implements ServletContextAware {
         List<VakcinaPacijenta> prijave = vakcinaPacijentaService.findByUser_ImeContainsIgnoreCaseOrUser_PrezimeContainsIgnoreCaseOrUser_JMBGContainsIgnoreCase(term, term, term);
         prijave.removeIf(p -> p.getStatus() != EStatus.CREATED);
 
-        rez.addObject("prijave", prijave);
+        rez.addObject("prijavePr", prijave);
 
         return rez;
     }
