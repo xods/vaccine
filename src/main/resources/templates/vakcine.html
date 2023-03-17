@@ -2,67 +2,101 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <base th:href="@{/}"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <base th:href="@{/}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="icon" href="/img/img.png" type="image/icon type">
     <title>Vakcine</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:if="${session.user == null}">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"><a class="nav-link" href="login.html">Prijava</a></li>
-        <li class="nav-item active"><a class="nav-link" href="registracija.html">Registracija</a></li>
-    </ul>
-</nav>
-<nav class="navbar navbar-expand-lg navbar-light bg-light" th:unless="${session.user == null}">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"><a class="nav-link" href="/">Početna</a></li>
-        <li class="nav-item active" th:if="${session.role == 'ADMIN' and statistika == null}"><a class="nav-link" href="statistikaAdd.html">Dodaj statistiku</a></li>
-        <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" th:href="vestAdd.html">Dodaj vest</a></li>
-        <li class="nav-item active"><a class="nav-link" href="vakcina/sve">Vakcine</a></li>
-        <li class="nav-item active" th:if="${session.role == 'STAFF'}"><a class="nav-link" href="prijave/sve">Prijave za vakcinaciju</a></li>
-        <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" href="order/svi">Narudžbenice</a></li>
-        <li class="nav-item active"><a class="nav-link" href="user">Moj profil</a></li>
-        <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
-    </ul>
-</nav>
-    <table>
-        <caption>Vakcine</caption>
-        <tr>
-            <th>Naziv</th>
-            <th>Kolicina</th>
-        </tr>
-        <tr th:each="v : ${vakcine}" th:if="${session.role == 'ADMIN' or session.role == 'STAFF' or (session.role == 'PATIENTS' and v.kolicina > 0)}">
-            <td><a th:if="${session.role != 'PATIENTS'}" th:href="|vakcina/${v.id}|" th:text="${v.naziv}"></a>
-                <label th:if="${session.role == 'PATIENTS'}" th:text="${v.naziv}"></label></td>
-            <td th:text="${v.kolicina}"></td>
-            <td th:if="${session.role == 'PATIENTS' and brDoza < 4 }"><a th:href="|prijave/${v.id}|">prijavi se</a></td>
-        </tr>
-    </table>
-    <a class="btn btn-primary btn-block my-4" href="order/">Naruči vakcinu</a>
-    <a th:if="${session.role == 'ADMIN'}" class="btn btn-primary btn-block my-4" href="vakcina/add">Dodaj vakcinu</a>
-    <form method="post" action="/vakcina/search">
-        <label for="s">Pretraga</label>
-        <input id="s" type="search" value="" name="term" required><br>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" th:if="${session.user == null}">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="login.html">Prijava</a></li>
+            <li class="nav-item active"><a class="nav-link" href="registracija.html">Registracija</a></li>
+        </ul>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" th:unless="${session.user == null}">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="/">Početna</a></li>
+            <li class="nav-item active" th:if="${session.role == 'ADMIN' and statistika == null}"><a class="nav-link" href="statistikaAdd.html">Dodaj statistiku</a></li>
+            <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" th:href="vestAdd.html">Dodaj vest</a></li>
+            <li class="nav-item active"><a class="nav-link" href="vakcina/sve">Vakcine</a></li>
+            <li class="nav-item active" th:if="${session.role == 'STAFF'}"><a class="nav-link" href="prijave/sve">Prijave za vakcinaciju</a></li>
+            <li class="nav-item active" th:unless="${session.role == 'PATIENTS'}"><a class="nav-link" href="order/svi">Narudžbenice</a></li>
+            <li class="nav-item active"><a class="nav-link" href="user">Moj profil</a></li>
+            <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
+        </ul>
+    </nav>
 
-        <label for="km">Minimalna kolicina</label>
-        <input id="km" type="number" value="0" min="0"  max="1000" step="5" name="mi" required><br>
+    <div class="row d-flex justify-content-center m-5 px-5">
+        <table class="table table-striped table-hover col-6 caption-top">
+            <caption class="h1">Vakcine</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Naziv</th>
+                    <th scope="col">Kolicina</th>
+                    <th th:if="${session.role == 'PATIENTS' and brDoza < 4 }" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody th:if="${session.role == 'PATIENTS'}">
+                <tr  th:each="v : ${vakcine}" th:if="${v.kolicina > 0}">
+                    <td th:text="${v.naziv}"></td>
+                    <td th:text="${v.kolicina}"></td>
+                    <td th:if="${brDoza < 4 }"><a th:href="|prijave/${v.id}|">prijavi se</a></td>
+                </tr>
+            </tbody>
 
-        <label for="kx">Maksimalna kolicina</label>
-        <input id="kx" type="number" value="1000" min="0"  max="1000" step="5" name="mx" required><br>
+            <tbody th:if="${session.role != 'PATIENTS'}">
+                <tr  th:each="v : ${vakcine}">
+                    <td><a th:href="|vakcina/${v.id}|" th:text="${v.naziv}"></a></td>
+                    <td th:text="${v.kolicina}"></td>
+                </tr>
+            </tbody>
+        </table>
 
-        <label for="so">Sortiraj po</label>
-        <select id="so" name="s">
-            <option value="" selected></option>
-            <option value="naziv">Nazivu vakcine</option>
-            <option value="proizvodjac.naziv">Nazivu proizvođača</option>
-            <option value="proizvodjac.drzava">Državi proizvođača</option>
-            <option value="kolicina">Količini</option>
-        </select><br>
+        <div class="col-4">
+            <a th:if="${session.role == 'STAFF'}" class="btn btn-primary btn-block my-4" href="order/">Naruči vakcinu</a>
+            <a th:if="${session.role == 'ADMIN'}" class="btn btn-primary btn-block my-4" href="vakcina/add">Dodaj vakcinu</a>
+        </div>
 
-        <input type="checkbox" name="u" id="u" checked>
-        <label for="u">Rastuće</label><br>
+        <form class="col-8 align-self-center container-fluid mt-5 text-center" method="post" action="/vakcina/search">
+            <div class="form-outline col-md-12">
+                <div class="row">
+                    <div class="input-group">
+                        <input class="form-control" type="search" value="" name="term" required>
+                        <input class="btn btn-primary" type="submit" value="Sortiraj">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="form-group col-md-2">
+                        <input class="form-control" id="km" type="number" value="0" min="0"  max="1000" step="5" name="mi" required>
+                        <label class="form-label" for="km">Minimalna količina</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input class="form-control" id="kx" type="number" value="1000" min="0"  max="1000" step="5" name="mx" required>
+                        <label class="form-label" for="kx">Maksimalna kolicina</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="checkbox" class="btn-check" id="btn-check-outlined" name="u" checked>
+                        <label class="btn btn-outline-primary" for="btn-check-outlined">Rastuće</label>
+                        <!--
+                        <input class="form-check-input" type="checkbox" name="u" id="u" checked>
+                        <label class="form-check-label" for="u">Rastuće</label>-->
+                    </div>
+                    <div class="form-group col-md-6">
+                        <select class="form-select" id="so" name="s">
+                            <option value="" selected></option>
+                            <option value="naziv">Nazivu vakcine</option>
+                            <option value="proizvodjac.naziv">Nazivu proizvođača</option>
+                            <option value="proizvodjac.drzava">Državi proizvođača</option>
+                            <option value="kolicina">Količini</option>
+                        </select>
+                        <label class="form-label" for="so">Sortiraj po</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
-        <input type="submit" value="Sortiraj">
-    </form>
 </body>
 </html>
