@@ -19,7 +19,7 @@ public class Proizvodjac {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "proizvodjac_id", nullable = false)
+    @Column(name = "proizvodjac_id", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "naziv", unique = true)

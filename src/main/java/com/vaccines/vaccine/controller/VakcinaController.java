@@ -49,6 +49,7 @@ public class VakcinaController implements ServletContextAware {
     @GetMapping(value = "/sve")
     public ModelAndView getAll(HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
         User user = (User) session.getAttribute("user");
@@ -66,8 +67,8 @@ public class VakcinaController implements ServletContextAware {
         rezultat.addObject("vakcine", vakcineDTO);
         rezultat.addObject("brDoza", brDoza);
 
+        session.setAttribute("message", "");
         return rezultat;
-
     }
 
     @PostMapping(value ="/search")
@@ -78,6 +79,7 @@ public class VakcinaController implements ServletContextAware {
                                 @RequestParam @Nullable Boolean u,
                                 HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
 
@@ -101,12 +103,14 @@ public class VakcinaController implements ServletContextAware {
         ModelAndView rez = new ModelAndView("vakcine");
         rez.addObject("vakcine", vakcineDTO);
 
+        session.setAttribute("message", "");
         return rez;
     }
 
     @GetMapping(value = "/{id}")
     public ModelAndView find(@PathVariable Long id, HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
         Vakcina vakcina = vakcinaService.findById(id).orElse(new Vakcina());
@@ -120,12 +124,15 @@ public class VakcinaController implements ServletContextAware {
         ModelAndView rez = new ModelAndView("vakcina");
         rez.addObject("vakcina", new VakcinaDTO(vakcina));
         rez.addObject("proizvodjaci", proizvodjaciDTO);
+
+        session.setAttribute("message", "");
         return rez;
     }
 
     @GetMapping(value = "/add")
     public ModelAndView add(HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
 
@@ -138,6 +145,7 @@ public class VakcinaController implements ServletContextAware {
         ModelAndView rez = new ModelAndView("vakcinaAdd");
         rez.addObject("proizvodjaci", proizvodjacDTOS);
 
+        session.setAttribute("message", "");
         return rez;
     }
 
@@ -146,7 +154,9 @@ public class VakcinaController implements ServletContextAware {
                             @RequestParam String naziv,
                             HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
+            return;
         }
 
         Vakcina vakcina = new Vakcina();
@@ -158,6 +168,7 @@ public class VakcinaController implements ServletContextAware {
 
         vakcinaService.save(vakcina);
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL + "vakcina/sve");
     }
     
@@ -168,7 +179,9 @@ public class VakcinaController implements ServletContextAware {
                               HttpSession session, HttpServletResponse response) throws IOException {
 
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
+            return;
         }
         Vakcina vakcina = vakcinaService.findById(Long.parseLong(id)).orElse(new Vakcina());
         Proizvodjac proizvodjac = proizvodjacService.findById(Long.parseLong(idP)).orElse(new Proizvodjac());
@@ -178,6 +191,7 @@ public class VakcinaController implements ServletContextAware {
         
         vakcinaService.save(vakcina);
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL + "vakcina/sve");
     }
 }

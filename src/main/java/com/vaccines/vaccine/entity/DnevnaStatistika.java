@@ -18,7 +18,7 @@ public class DnevnaStatistika {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "statistika_id", nullable = false)
+    @Column(name = "statistika_id", unique = true, nullable = false)
     private Long statistika_id;
 
     @Column(name = "oboleli_24", nullable = false)

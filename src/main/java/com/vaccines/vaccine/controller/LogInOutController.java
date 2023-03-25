@@ -41,8 +41,13 @@ public class LogInOutController implements ServletContextAware {
         if(user != null){
             session.setAttribute("user", user);
             session.setAttribute("role", user.getUloga().toString());
+        }else {
+            session.setAttribute("message", "Nep");
+            response.sendRedirect(bURL + "/login.html");
+            return;
         }
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL);
     }
 
@@ -50,6 +55,7 @@ public class LogInOutController implements ServletContextAware {
     public void logout(HttpSession session, HttpServletResponse response) throws IOException {
         session.setAttribute("user", null);
         session.setAttribute("role", null);
+        session.setAttribute("message", "");
         response.sendRedirect(bURL);
     }
 }

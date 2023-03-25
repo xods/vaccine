@@ -27,6 +27,12 @@
             <li class="nav-item active"><a class="nav-link" href="log/odjava">Odjava</a></li>
         </ul>
     </nav>
+
+    <div th:if="${session.message == 'Nte'}" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Ne postoji trazeni objekat!</strong> Objekat koji ste trazili nepostoji!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <form class="align-self-center col-6 container-fluid mt-5 text-center" method="post" th:action="|order/${order.id}|">
         <div class="row">
             <div class="form-group col-md-6">

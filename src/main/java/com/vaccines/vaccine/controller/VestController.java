@@ -58,7 +58,9 @@ public class VestController implements ServletContextAware {
                      @RequestParam String sadrzaj,
                      HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            session.setAttribute("message","Nod");
             response.sendRedirect(bURL);
+            return;
         }
         Vest vest = new Vest();
 
@@ -68,6 +70,7 @@ public class VestController implements ServletContextAware {
 
         vestService.save(vest);
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL);
     }
 }

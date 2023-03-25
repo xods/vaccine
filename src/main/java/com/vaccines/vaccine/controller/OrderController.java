@@ -50,6 +50,7 @@ public class OrderController implements ServletContextAware {
     public ModelAndView addOrder(HttpSession session, HttpServletResponse response) throws IOException {
 
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
 
@@ -63,18 +64,22 @@ public class OrderController implements ServletContextAware {
 
         rezultat.addObject("vakcine", vakcineDTO);
 
+        session.setAttribute("message", "");
         return rezultat;
     }
 
     @GetMapping(value = "/svi")
     public void redirekt(HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
 
         if (session.getAttribute("role") == ERole.ADMIN.toString()){
+            session.setAttribute("message", "");
             response.sendRedirect(bURL + "order/adminOrders");
         }else {
+            session.setAttribute("message", "");
             response.sendRedirect(bURL + "order/staffOrders");
         }
     }
@@ -82,6 +87,7 @@ public class OrderController implements ServletContextAware {
     @GetMapping(value = "/adminOrders")
     public ModelAndView getAllAdmin(HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
 
@@ -95,13 +101,14 @@ public class OrderController implements ServletContextAware {
         }
         rez.addObject("ordersCr", ordersDTOCr);
 
-
+        session.setAttribute("message", "");
         return rez;
     }
 
     @GetMapping(value = "/staffOrders")
     public ModelAndView getAllStaff(HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
             return null;
         }
@@ -131,6 +138,7 @@ public class OrderController implements ServletContextAware {
         }
         rez.addObject("ordersRj", ordersDTORj);
 
+        session.setAttribute("message", "");
         return rez;
     }
 
@@ -140,6 +148,7 @@ public class OrderController implements ServletContextAware {
                     @RequestParam String razlog,
                     HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") != ERole.STAFF.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
         Order order = new Order();
@@ -158,22 +167,26 @@ public class OrderController implements ServletContextAware {
 
         orderService.save(order);
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL + "order/svi");
     }
 
     @GetMapping(value = "/{id}")
     public ModelAndView update(@PathVariable("id") String id, HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
         ModelAndView rez = new ModelAndView("order");
 
         Optional<Order> order = orderService.findById(Long.valueOf(id));
         if (order.isEmpty()){
+            session.setAttribute("message", "Nte");
             response.sendRedirect(bURL + "order/svi");
         }
         rez.addObject("order", new OrderDTO(order.get()));
 
+        session.setAttribute("message", "");
         return rez;
     }
     @PostMapping(value = "/{id}")
@@ -183,6 +196,7 @@ public class OrderController implements ServletContextAware {
                        @RequestParam @Nullable String napomena,
                        HttpSession session, HttpServletResponse response) throws IOException {
         if(session.getAttribute("user") == null || session.getAttribute("role") == ERole.PATIENTS.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
 
@@ -210,6 +224,7 @@ public class OrderController implements ServletContextAware {
         }
         orderService.save(order);
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL + "order/svi");
     }
 }

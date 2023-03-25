@@ -14,6 +14,12 @@
             <li class="nav-item active"><a class="nav-link" href="/">Početna</a></li>
         </ul>
     </nav>
+
+    <div th:if="${session.message == 'Nep'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Neuspela registracija!</strong> Neko vec postoji sa tim emailom ili niste dobro uneli šifru!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <form class="align-self-center col-6 container-fluid mt-5 text-center" action="/user" method="post">
 
         <div class="row">

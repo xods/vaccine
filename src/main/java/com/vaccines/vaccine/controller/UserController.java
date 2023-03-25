@@ -48,6 +48,7 @@ public class UserController implements ServletContextAware {
     public ModelAndView getUser(HttpSession session, HttpServletResponse response) throws IOException {
 
         if(session.getAttribute("user") == null){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
         }
 
@@ -62,6 +63,7 @@ public class UserController implements ServletContextAware {
         List<VakcinaPacijenta> aktivne = vakcinaPacijentaService.findByUser_IdAndStatusOrderByDatumVakcinacijeAsc(user.getId(), EStatus.CREATED);
         rez.addObject("aktivne", aktivne);
 
+        session.setAttribute("message", "");
         return rez;
     }
 
@@ -81,7 +83,7 @@ public class UserController implements ServletContextAware {
         user = userService.findByEmail(email);
 
         if (user != null || !password.equals(password2)){
-            session.setAttribute("message", "failure");
+            session.setAttribute("message", "Nep");
             response.sendRedirect(bURL+"registracija.html");
             return;
         }
@@ -105,6 +107,7 @@ public class UserController implements ServletContextAware {
             session.setAttribute("message", "success");
         }
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL);
     }
 
@@ -122,7 +125,7 @@ public class UserController implements ServletContextAware {
         User user = (User) session.getAttribute("user");
 
         if (user == null || !password.equals(password2)){
-            session.setAttribute("message", "failure");
+            session.setAttribute("message", "Nep");
             response.sendRedirect(bURL+"registracija.html");
             return;
         }
@@ -146,6 +149,7 @@ public class UserController implements ServletContextAware {
             session.setAttribute("message", "success");
         }
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL);
     }
 }

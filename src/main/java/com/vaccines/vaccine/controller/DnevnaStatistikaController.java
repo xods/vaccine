@@ -1,6 +1,5 @@
 package com.vaccines.vaccine.controller;
 
-import com.vaccines.vaccine.dto.DnevnaStatistikaDTO;
 import com.vaccines.vaccine.dto.VestDTO;
 import com.vaccines.vaccine.entity.DnevnaStatistika;
 import com.vaccines.vaccine.entity.ERole;
@@ -12,8 +11,6 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
@@ -74,7 +71,9 @@ public class DnevnaStatistikaController implements ServletContextAware {
         DnevnaStatistika statistika = service.findByVremeObjavljivanja(new Date());
 
         if(statistika != null || session.getAttribute("user") == null || session.getAttribute("role") != ERole.ADMIN.toString()){
+            session.setAttribute("message", "Nod");
             response.sendRedirect(bURL);
+            return;
         }
 
         statistika = new DnevnaStatistika();
@@ -87,6 +86,7 @@ public class DnevnaStatistikaController implements ServletContextAware {
 
          service.save(statistika);
 
+        session.setAttribute("message", "");
         response.sendRedirect(bURL);
     }
 }
