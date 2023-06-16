@@ -84,7 +84,7 @@ public class UserController implements ServletContextAware {
 
         if (user != null || !password.equals(password2)){
             session.setAttribute("message", "Nep");
-            response.sendRedirect(bURL+"registracija.html");
+            response.sendRedirect(bURL+"log/reg");
             return;
         }
 

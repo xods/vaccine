@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -43,7 +44,7 @@ public class LogInOutController implements ServletContextAware {
             session.setAttribute("role", user.getUloga().toString());
         }else {
             session.setAttribute("message", "Nep");
-            response.sendRedirect(bURL + "/login.html");
+            response.sendRedirect(bURL + "log");
             return;
         }
 
@@ -57,5 +58,17 @@ public class LogInOutController implements ServletContextAware {
         session.setAttribute("role", null);
         session.setAttribute("message", "");
         response.sendRedirect(bURL);
+    }
+
+    @GetMapping(value = "")
+    public ModelAndView login() {
+        ModelAndView rez = new ModelAndView("login");
+        return rez;
+    }
+
+    @GetMapping(value = "/reg")
+    public ModelAndView reg() {
+        ModelAndView rez = new ModelAndView("registracija");
+        return rez;
     }
 }

@@ -43,7 +43,9 @@ public class DnevnaStatistikaController implements ServletContextAware {
     }
 
     @GetMapping
-    public ModelAndView getDanas(){
+    public ModelAndView getDanas(HttpSession session){
+        session.setAttribute("message", "success");
+
         ModelAndView rezultat = new ModelAndView("index");
 
         DnevnaStatistika statistika = service.findByVremeObjavljivanja(new Date());
